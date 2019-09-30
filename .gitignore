@@ -1,0 +1,16 @@
+﻿*.pdb
+*.dll.config
+.vs
+.svn
+.user
+
+# IDE - VSCode
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+bin
+obj
+
