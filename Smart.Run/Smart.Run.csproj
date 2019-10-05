@@ -8,13 +8,17 @@
   <ItemGroup>
     <PackageReference Include="ACoreX.AssemblyLoader" Version="1.0.1" />
     <PackageReference Include="ACoreX.Authentication.JWT" Version="1.0.0" />
+    <PackageReference Include="ACoreX.Injector.Abstractions" Version="1.0.1" />
     <PackageReference Include="ACoreX.Injector.Core" Version="1.0.0" />
     <PackageReference Include="ACoreX.WebAPI" Version="1.0.0" />
+    <PackageReference Include="Dapper" Version="2.0.30" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
+    <PackageReference Include="System.Data.SqlClient" Version="4.7.0" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Smart.Data\Smart.Data.Module\Smart.Data.Module.csproj" />
     <ProjectReference Include="..\Smart.Security.Autentication\Smart.Security.Autentication.Module\Smart.Security.Autentication.Module.csproj" />
   </ItemGroup>
 

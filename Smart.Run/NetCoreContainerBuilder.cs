@@ -32,21 +32,36 @@ namespace Smart.Run
             return sp.GetService<T>();
         }
 
-        void IContainerBuilder.AddScope<TService, TImplementation>()
-        {
-            Services.AddScoped(typeof(TService), typeof(TImplementation));
-        }
+       
 
         void IContainerBuilder.AddSingleton<TService, TImplementation>()
         {
             Services.AddSingleton(typeof(TService), typeof(TImplementation));
         }
 
+        void IContainerBuilder.AddSingleton<TService, TImplementation>(TImplementation instance)
+        {
+            Services.AddSingleton(typeof(TService), instance);
+        }
+
+      
+
+        void IContainerBuilder.AddScope<TService, TImplementation>(TImplementation instance)
+        {
+            Services.AddScoped(typeof(TService), c => instance);
+        }
+        void IContainerBuilder.AddScope<TService, TImplementation>()
+        {
+            Services.AddScoped(typeof(TService), typeof(TImplementation));
+        }
+
         void IContainerBuilder.AddTransient<TService, TImplementation>()
         {
             Services.AddTransient(typeof(TService), typeof(TImplementation));
         }
-
-
+        void IContainerBuilder.AddTransient<TService, TImplementation>(TImplementation instance)
+        {
+            Services.AddTransient(typeof(TService), c=> instance);
+        }
     }
 }
