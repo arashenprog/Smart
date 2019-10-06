@@ -26,7 +26,7 @@ namespace Smart.Data.Module.Contexts
             if (result != null)
             {
                 StringBuilder sb = new StringBuilder();
-                sb.Append("Select");
+                sb.Append("SELECT");
                 if (!string.IsNullOrEmpty(result.DSRC_JSO_FIELDS))
                 {
                     dynamic json = JsonConvert.DeserializeObject(result.DSRC_JSO_FIELDS);
@@ -41,31 +41,45 @@ namespace Smart.Data.Module.Contexts
                             sb.AppendFormat(" {0} as {1},", json[i].name, json[i].alias);
                         }
 
-                        sb.AppendLine();
                     }
 
                 }
-                sb.AppendFormat("from {0}", result.DSRC_SRC);
+                sb.AppendFormat("FROM {0} ", result.DSRC_SRC);
                 if (input.Filters != null && !string.IsNullOrEmpty(result.DSRC_QRY_PARAMS))
                 {
 
                     Match queryparameters = Regex.Match(result.DSRC_QRY_PARAMS.ToString(), @"\@([^=<>\s\']+)");
-                    foreach (QueryFilterItems item in input.Filters)
+                    for (int j = 0; j < input.Filters.Count; j++)
                     {
-
                         foreach (object param in queryparameters.Captures)
                         {
+                            QueryFilterItems item = input.Filters[j];
                             string stringparam = param.ToString();
                             if (stringparam == item.FieldName)
                             {
-                                sb.AppendFormat(" Where {0} = {1}", stringparam, item.Value);
+                                stringparam = param.ToString().Replace("@", "");
+                                //sb.AppendFormat(" WHERE {0} {1} '{2}' ", stringparam, item.Operator == QueryFilterOperator.Equal ? "=" : "", item.Value);
+                                sb.AppendFormat("WHERE ");
+                                sb.AppendFormat(result.DSRC_QRY_PARAMS.ToString().Replace(param.ToString(), " '" + item.Value.ToString() + "' "));
                             }
 
                         }
 
                     }
-                    sb.AppendFormat("Where ");
 
+                }
+                if (!string.IsNullOrEmpty(result.DSRC_ORDER))
+                {
+                    sb.AppendFormat(" ORDER BY {0} ", result.DSRC_ORDER);
+                }
+
+
+                sb.AppendFormat("OFFSET {0} ROWS ", input.Skip.ToString());
+
+
+                if (input.Take != 0)
+                {
+                    sb.AppendFormat("FETCH NEXT {0} ROWS ONLY", input.Take.ToString());
                 }
                 re = sb.ToString();
 
