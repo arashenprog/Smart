@@ -4,16 +4,17 @@ using System.Text;
 
 namespace Smart.Data.Abstractions.Models
 {
-    class DataSourceInput
+    public class DataSourceInput
     {
-        public string Code { get; set; }
-        public Guid ID { get; set; }
-        public int SourceType { get; set; }
-        public string Source { get; set; }
-        public string Title { get; set; }
-        public string QueryParameters { get; set; }
-        public string Order { get; set; }
-        public List<QueryFilterItems> Fields { get; set; }
+        public string DSRC_COD { get; set; }
+        public Guid DSRC_ID { get; set; }
+        public DataSourceType DSRC_TYP_SRC { get; set; }
+        public string DSRC_SRC { get; set; }
+        public string DSRC_TIT { get; set; }
+        public string DSRC_QRY_PARAMS { get; set; }
+        public string DSRC_JSO_FIELDS { get; set; }
+        public string DSRC_COD_RLS { get; set; }
+        public string DSRC_ORDER { get; set; }
 
     }
 }

@@ -17,7 +17,7 @@ namespace Smart.Data.Module.Contexts
             _data = data;
         }
         [WebApi(Route = "api/getDS", Authorized = false, Method = WebApiMethod.Post)]
-        public QueryGeneratedCommand Generate(QueryInputParamater input)
+        public DataSourceInput Generate(QueryInputParamater input)
         {
 
             DataSourceInput result = _data.Query<DataSourceInput>("SELECT Top 1 * FROM ADM.ADM_DATA_SOURCES WHERE DSRC_COD=@P1",
@@ -84,11 +84,10 @@ namespace Smart.Data.Module.Contexts
                 re = sb.ToString();
 
             }
-            return new QueryGeneratedCommand
-            {
-                Command = re
-            };
+            return _data.Query<DataSourceInput>(re,
+                new DBParam { Name = "@P1", Value = input.Code }).FirstOrDefault();
 
         }
+
     }
 }

@@ -8,4 +8,8 @@
     <Exec Command="copy /Y &quot;$(TargetDir)$(ProjectName).dll&quot; &quot;$(SolutionDir)lib\$(ProjectName).dll&quot;" />
   </Target>
 
+  <ItemGroup>
+    <PackageReference Include="ACoreX.Data.Abstractions" Version="1.0.2" />
+  </ItemGroup>
+
 </Project>

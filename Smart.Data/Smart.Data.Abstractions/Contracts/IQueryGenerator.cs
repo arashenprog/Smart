@@ -7,6 +7,6 @@ namespace Smart.Data.Abstractions.Contracts
 {
     public interface IQueryGenerator
     {
-        QueryGeneratedCommand Generate(QueryInputParamater input);
+        DataSourceInput Generate(QueryInputParamater input);
     }
 }
