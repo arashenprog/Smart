@@ -3,6 +3,7 @@ using ACoreX.WebAPI;
 using Newtonsoft.Json;
 using Smart.Data.Abstractions.Contracts;
 using Smart.Data.Abstractions.Models;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -17,12 +18,13 @@ namespace Smart.Data.Module.Contexts
             _data = data;
         }
         [WebApi(Route = "api/getDS", Authorized = false, Method = WebApiMethod.Post)]
-        public DataSourceInput Generate(QueryInputParamater input)
+        public dynamic Generate(QueryInputParamater input)
         {
 
             DataSourceInput result = _data.Query<DataSourceInput>("SELECT Top 1 * FROM ADM.ADM_DATA_SOURCES WHERE DSRC_COD=@P1",
                 new DBParam { Name = "@P1", Value = input.Code }).FirstOrDefault();
             string re = "";
+            List<DBParam> dbparam = new List<DBParam>();
             if (result != null)
             {
                 StringBuilder sb = new StringBuilder();
@@ -45,6 +47,7 @@ namespace Smart.Data.Module.Contexts
 
                 }
                 sb.AppendFormat("FROM {0} ", result.DSRC_SRC);
+
                 if (input.Filters != null && !string.IsNullOrEmpty(result.DSRC_QRY_PARAMS))
                 {
 
@@ -55,13 +58,18 @@ namespace Smart.Data.Module.Contexts
                         {
                             QueryFilterItems item = input.Filters[j];
                             string stringparam = param.ToString();
-                            if (stringparam == item.FieldName)
-                            {
-                                stringparam = param.ToString().Replace("@", "");
-                                //sb.AppendFormat(" WHERE {0} {1} '{2}' ", stringparam, item.Operator == QueryFilterOperator.Equal ? "=" : "", item.Value);
-                                sb.AppendFormat("WHERE ");
-                                sb.AppendFormat(result.DSRC_QRY_PARAMS.ToString().Replace(param.ToString(), " '" + item.Value.ToString() + "' "));
-                            }
+                            //if (stringparam == item.FieldName)
+                            //{
+                                //stringparam = param.ToString().Replace("@", "");
+                                sb.AppendFormat(" WHERE {0} {1} {2} ", item.FieldName, item.Operator == QueryFilterOperator.Equal ? "=" : "", param.ToString());
+                                //sb.AppendFormat("WHERE ");
+                                //sb.AppendFormat(result.DSRC_QRY_PARAMS.ToString().Replace(param.ToString(), " '" + item.Value.ToString() + "' "));
+                                dbparam = new List<DBParam>
+                                {
+                                    new DBParam { Name = param.ToString(), Value = item.Value }
+                                };
+                            //}
+
 
                         }
 
@@ -84,8 +92,8 @@ namespace Smart.Data.Module.Contexts
                 re = sb.ToString();
 
             }
-            return _data.Query<DataSourceInput>(re,
-                new DBParam { Name = "@P1", Value = input.Code }).FirstOrDefault();
+            return _data.Query<dynamic>(re,
+               dbparam.ToArray()).FirstOrDefault();
 
         }
 

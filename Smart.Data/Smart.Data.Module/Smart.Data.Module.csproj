@@ -12,9 +12,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="ACoreX.Data.Abstractions" Version="1.0.2" />
+    <PackageReference Include="ACoreX.Data.Abstractions" Version="1.0.3" />
     <PackageReference Include="ACoreX.Data.Dapper" Version="1.0.3" />
-    <PackageReference Include="ACoreX.Injector.Abstractions" Version="1.0.1" />
+    <PackageReference Include="ACoreX.Injector.Abstractions" Version="1.0.2" />
     <PackageReference Include="ACoreX.WebAPI" Version="1.0.0" />
     <PackageReference Include="System.Data.SqlClient" Version="4.7.0" />
   </ItemGroup>
