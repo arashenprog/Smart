@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="ACoreX.WebAPI" Version="1.0.0" />
+    <PackageReference Include="EPPlus.Core" Version="1.5.4" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Smart.Security.Autentication\Smart.Security.Autentication.Module\Smart.Security.Autentication.Module.csproj" />
+    <ProjectReference Include="..\Smart.Utility.Importer.Contracts\Smart.Utility.Importer.Contracts.csproj" />
+  </ItemGroup>
+
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="copy /Y &quot;$(TargetDir)$(ProjectName).dll&quot; &quot;$(SolutionDir)lib\$(ProjectName).dll&quot;" />
+  </Target>
+
+</Project>

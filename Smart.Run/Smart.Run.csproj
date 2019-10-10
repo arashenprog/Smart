@@ -26,6 +26,8 @@
     <ProjectReference Include="..\Smart.Data\Smart.Data.Module\Smart.Data.Module.csproj" />
     <ProjectReference Include="..\Smart.Security.Autentication\Smart.Security.Autentication.Abstractions\Smart.Security.Autentication.Abstractions.csproj" />
     <ProjectReference Include="..\Smart.Security.Autentication\Smart.Security.Autentication.Module\Smart.Security.Autentication.Module.csproj" />
+    <ProjectReference Include="..\Smart.Utility.Importer.Contracts\Smart.Utility.Importer.Contracts.csproj" />
+    <ProjectReference Include="..\Smart.Utility.Importer.Module\Smart.Utility.Importer.Module.csproj" />
   </ItemGroup>
 
   <ItemGroup>
