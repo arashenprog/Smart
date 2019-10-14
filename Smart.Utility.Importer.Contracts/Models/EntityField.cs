@@ -11,14 +11,13 @@ namespace CRM.Data.Entities
             #endregion
         }
 
-        #region Generated Properties
-        public Guid EtfdId { get; set; }
+        
+        public Guid ETFD_ID { get; set; }
 
-        public Guid EtfdEnttId { get; set; }
+        public Guid ETFD_ENTT_ID { get; set; }
 
-        public string EtfdName { get; set; }
+        public string ETFD_NAME { get; set; }
 
-        #endregion
 
         #region Generated Relationships
         public virtual Entities EtfdEntities { get; set; }

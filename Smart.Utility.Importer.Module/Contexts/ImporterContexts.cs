@@ -1,5 +1,6 @@
 ﻿using ACoreX.Data.Abstractions;
 using ACoreX.WebAPI;
+using Crm.Data.Entities;
 using CRM.Data.Entities;
 using OfficeOpenXml;
 using Smart.Utility.Importer.Contracts.Contracts;
@@ -20,11 +21,22 @@ namespace Smart.Utility.Importer.Module.Contexts
             _data = data;
         }
 
+
         [WebApi(Route = "/api/ie")]
-        public string ImportExcel()
+        public string ImportProduct()
         {
-            var filePath = @"D:/test.xlsx";
+            var getProductFields = _data.Query<EntityField>("select * from ADM.ADM_ENTITY_FIELDS where ETFD_ENTT_ID = @P1",
+                                new DBParam { Name = "@P1", Value = "e4350589-45eb-e911-b511-d850e641f96f" });
+
+            foreach (var item in getProductFields)
+            {
+                //item.ETFD_NAME
+            }
+
+            string filePath = @"D:/test.xlsx";
             FileInfo file = new FileInfo(filePath);
+
+
 
             using (ExcelPackage package = new ExcelPackage(file))
             {
@@ -37,13 +49,13 @@ namespace Smart.Utility.Importer.Module.Contexts
                 {
                     //for (int col = 1; col <= ColCount; col++)
                     //{
-                        // This is just for demo purposes
-                       // rawText += worksheet.Cells[row, col].Value.ToString() + "\t";
-                        var result = _data.Query<Product>("INSERT INTO CRM.CRM_PRODUCT (PRDT_NAME,	PRDT_TYPE,	PRDT_BRAND) VALUES(@P1,@P2,@P3); ",
-                new DBParam { Name = "@P1", Value = worksheet.Cells[row, 1].Value.ToString() },
-                new DBParam { Name = "@P2", Value = worksheet.Cells[row, 2].Value.ToString() },
-                new DBParam { Name = "@P3", Value = worksheet.Cells[row, 3].Value.ToString() }
-                );
+                    // This is just for demo purposes
+                    // rawText += worksheet.Cells[row, col].Value.ToString() + "\t";
+                    var result = _data.Query<Products>("INSERT INTO CRM.CRM_PRODUCTS (PRDT_NAME,	PRDT_TYPE,	PRDT_BRAND) VALUES(@P1,@P2,@P3); ",
+                                new DBParam { Name = "@P1", Value = worksheet.Cells[row, 1].Value.ToString() },
+                                new DBParam { Name = "@P2", Value = worksheet.Cells[row, 2].Value.ToString() },
+                                new DBParam { Name = "@P3", Value = worksheet.Cells[row, 3].Value.ToString() }
+            );
                     //}
                     rawText += "\r\n";
                 }

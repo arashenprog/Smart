@@ -27,9 +27,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Utility", "Utility", "{ED5C
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Importer", "Importer", "{BF9A41F8-1E8A-4092-B302-A79B4E37BB41}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Smart.Utility.Importer.Contracts", "Smart.Utility.Importer.Contracts\Smart.Utility.Importer.Contracts.csproj", "{381564CD-A224-46BE-9DE9-038E018A3831}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Smart.Utility.Importer.Contracts", "Smart.Utility.Importer.Contracts\Smart.Utility.Importer.Contracts.csproj", "{381564CD-A224-46BE-9DE9-038E018A3831}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Smart.Utility.Importer.Module", "Smart.Utility.Importer.Module\Smart.Utility.Importer.Module.csproj", "{ABC82679-7D11-4392-B562-535AAA0DAAC8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Smart.Utility.Importer.Module", "Smart.Utility.Importer.Module\Smart.Utility.Importer.Module.csproj", "{ABC82679-7D11-4392-B562-535AAA0DAAC8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Smart.View.Run", "Smart.View.Run\Smart.View.Run.csproj", "{CE1C84D3-CD4B-432B-9B7A-4959D38D5642}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -65,6 +67,10 @@ Global
 		{ABC82679-7D11-4392-B562-535AAA0DAAC8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ABC82679-7D11-4392-B562-535AAA0DAAC8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{ABC82679-7D11-4392-B562-535AAA0DAAC8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CE1C84D3-CD4B-432B-9B7A-4959D38D5642}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CE1C84D3-CD4B-432B-9B7A-4959D38D5642}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CE1C84D3-CD4B-432B-9B7A-4959D38D5642}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CE1C84D3-CD4B-432B-9B7A-4959D38D5642}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -79,6 +85,7 @@ Global
 		{BF9A41F8-1E8A-4092-B302-A79B4E37BB41} = {ED5CAEBD-3116-4E31-8550-9B8331CFD788}
 		{381564CD-A224-46BE-9DE9-038E018A3831} = {BF9A41F8-1E8A-4092-B302-A79B4E37BB41}
 		{ABC82679-7D11-4392-B562-535AAA0DAAC8} = {BF9A41F8-1E8A-4092-B302-A79B4E37BB41}
+		{CE1C84D3-CD4B-432B-9B7A-4959D38D5642} = {606E4021-E56E-4AA4-A69F-213639A949D5}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {33A9734A-620F-488E-8594-01A02A45773E}

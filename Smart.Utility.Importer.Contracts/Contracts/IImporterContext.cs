@@ -6,6 +6,6 @@ namespace Smart.Utility.Importer.Contracts.Contracts
 {
     public interface IImporterContext
     {
-        string ImportExcel();
+        string ImportProduct();
     }
 }
