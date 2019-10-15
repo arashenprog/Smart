@@ -28,38 +28,41 @@ namespace Smart.Data.Module.Contexts
             if (result != null)
             {
                 StringBuilder sb = new StringBuilder();
-                sb.Append("SELECT");
-                if (!string.IsNullOrEmpty(result.DSRC_JSO_FIELDS))
+                if (result.DSRC_TYP_SRC == DataSourceType.Table)
                 {
-                    dynamic json = JsonConvert.DeserializeObject(result.DSRC_JSO_FIELDS);
-                    for (int i = 0; i < json.Count; i++)
+
+                    sb.Append("SELECT");
+                    if (!string.IsNullOrEmpty(result.DSRC_JSO_FIELDS))
                     {
-                        if (i == json.Count - 1)
+                        dynamic json = JsonConvert.DeserializeObject(result.DSRC_JSO_FIELDS);
+                        for (int i = 0; i < json.Count; i++)
                         {
-                            sb.AppendFormat(" {0} as {1} ", json[i].name, json[i].alias);
-                        }
-                        else
-                        {
-                            sb.AppendFormat(" {0} as {1},", json[i].name, json[i].alias);
+                            if (i == json.Count - 1)
+                            {
+                                sb.AppendFormat(" {0} as {1} ", json[i].name, json[i].alias);
+                            }
+                            else
+                            {
+                                sb.AppendFormat(" {0} as {1},", json[i].name, json[i].alias);
+                            }
+
                         }
 
                     }
+                    sb.AppendFormat("FROM {0} ", result.DSRC_SRC);
 
-                }
-                sb.AppendFormat("FROM {0} ", result.DSRC_SRC);
-
-                if (input.Filters != null && !string.IsNullOrEmpty(result.DSRC_QRY_PARAMS))
-                {
-
-                    Match queryparameters = Regex.Match(result.DSRC_QRY_PARAMS.ToString(), @"\@([^=<>\s\']+)");
-                    for (int j = 0; j < input.Filters.Count; j++)
+                    if (input.Filters != null && !string.IsNullOrEmpty(result.DSRC_QRY_PARAMS))
                     {
-                        foreach (object param in queryparameters.Captures)
+
+                        Match queryparameters = Regex.Match(result.DSRC_QRY_PARAMS.ToString(), @"\@([^=<>\s\']+)");
+                        for (int j = 0; j < input.Filters.Count; j++)
                         {
-                            QueryFilterItems item = input.Filters[j];
-                            string stringparam = param.ToString();
-                            //if (stringparam == item.FieldName)
-                            //{
+                            foreach (object param in queryparameters.Captures)
+                            {
+                                QueryFilterItems item = input.Filters[j];
+                                string stringparam = param.ToString();
+                                //if (stringparam == item.FieldName)
+                                //{
                                 //stringparam = param.ToString().Replace("@", "");
                                 sb.AppendFormat(" WHERE {0} {1} {2} ", item.FieldName, item.Operator == QueryFilterOperator.Equal ? "=" : "", param.ToString());
                                 //sb.AppendFormat("WHERE ");
@@ -68,32 +71,45 @@ namespace Smart.Data.Module.Contexts
                                 {
                                     new DBParam { Name = param.ToString(), Value = item.Value }
                                 };
-                            //}
+                                //}
 
+
+                            }
 
                         }
 
                     }
+                    //if (!string.IsNullOrEmpty(result.DSRC_ORDER))
+                    //{
+                    //    sb.AppendFormat(" ORDER BY {0} ", result.DSRC_ORDER);
+                    //}
+
+
+                    ////sb.AppendFormat("OFFSET {0} ROWS ", input.Skip.ToString());
+
+
+                    //if (input.Take != 0)
+                    //{
+                    //    sb.AppendFormat("FETCH NEXT {0} ROWS ONLY", input.Take.ToString());
+                    //}
+
 
                 }
-                if (!string.IsNullOrEmpty(result.DSRC_ORDER))
+                else if (result.DSRC_TYP_SRC == DataSourceType.View)
                 {
-                    sb.AppendFormat(" ORDER BY {0} ", result.DSRC_ORDER);
+                    sb.AppendFormat("SELECT * FROM {0}", result.DSRC_SRC);
                 }
-
-
-                sb.AppendFormat("OFFSET {0} ROWS ", input.Skip.ToString());
-
-
-                if (input.Take != 0)
+                else if (result.DSRC_TYP_SRC == DataSourceType.StoreProcedure)
                 {
-                    sb.AppendFormat("FETCH NEXT {0} ROWS ONLY", input.Take.ToString());
+
+                }
+                else if (result.DSRC_TYP_SRC == DataSourceType.Function)
+                {
+
                 }
                 re = sb.ToString();
-
             }
-            return _data.Query<dynamic>(re,
-               dbparam.ToArray()).FirstOrDefault();
+            return _data.Query<dynamic>(re);
 
         }
 

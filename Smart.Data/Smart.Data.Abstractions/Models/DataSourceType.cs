@@ -1,10 +1,17 @@
 ﻿namespace Smart.Data.Abstractions.Models
 {
     public enum DataSourceType
-    {
-        Equal,
-        NotEqual,
-        Contain,
-        NotContain,
+    {Zero,
+        Table,
+        View,
+        StoreProcedure,
+        Function
     }
+    //public enum DataSourceType
+    //{
+    //    Equal,
+    //    NotEqual,
+    //    Contain,
+    //    NotContain,
+    //}
 }
