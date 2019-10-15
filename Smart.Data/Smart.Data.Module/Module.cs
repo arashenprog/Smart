@@ -11,7 +11,7 @@ namespace Smart.Data.Module
     {
         public void Register(IContainerBuilder builder)
         {
-            builder.AddScope<IData, DapperData>(new DapperData("Server=192.168.105.55\\exp17;Database=CRM; User Id = ma; Password = 123;"));
+            builder.AddScope<IData, DapperData>(new DapperData("Server=192.168.25.111;Database=CRM; Integrated Security = true;"));
             builder.AddScope<IQueryGenerator, QueryGeneratorContext>();
         }
     }

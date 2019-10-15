@@ -4,12 +4,14 @@
     <TargetFramework>netcoreapp3.0</TargetFramework>
     <AssemblyName>Smart.Data.Module</AssemblyName>
     <RootNamespace>Smart.Data.Module</RootNamespace>
-    <Version>1.0.2</Version>
+    <Version>1.0.3</Version>
+    <Description>fix data source</Description>
   </PropertyGroup>
 
   <ItemGroup>
     <Compile Remove="Contexts\DataSourceInput.cs" />
     <Compile Remove="Contexts\DataSourceType.cs" />
+    <Compile Remove="Contexts\DynamicFormContext.cs" />
   </ItemGroup>
 
   <ItemGroup>

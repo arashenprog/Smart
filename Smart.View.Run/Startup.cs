@@ -38,6 +38,7 @@ namespace Smart.View.Run
             services
            .AddAuthenticationInstance<JWTAuthService>()
            .AddMvc()
+           .AddNewtonsoftJson()
            .SetCompatibilityVersion(CompatibilityVersion.Version_3_0)
            .LoadModules(builder, libPath)
            .AddControllers();
