@@ -20,6 +20,8 @@ namespace Smart.View.Run
 {
     public class Startup
     {
+
+        readonly string MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -37,6 +39,16 @@ namespace Smart.View.Run
             IContainerBuilder builder = services.AddBuilder(new NetCoreContainerBuilder(services));
             services
            .AddAuthenticationInstance<JWTAuthService>()
+           .AddCors(options =>
+            {
+                options.AddPolicy(MyAllowSpecificOrigins,
+                builder =>
+                {
+                    builder.AllowAnyOrigin()
+                           .AllowAnyMethod()
+                           .AllowAnyHeader();
+                });
+            })
            .AddMvc()
            .AddNewtonsoftJson()
            .SetCompatibilityVersion(CompatibilityVersion.Version_3_0)
@@ -51,7 +63,7 @@ namespace Smart.View.Run
             {
                 app.UseDeveloperExceptionPage();
             }
-
+            app.UseCors(MyAllowSpecificOrigins);
             app.UseRouting();
 
             app.UseAuthorization();
