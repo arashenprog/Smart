@@ -35,10 +35,11 @@ namespace Smart.Data.Module.Contexts
                     // View And Tables
                     if (data.DSRC_TYP_SRC == DataSourceType.Table || data.DSRC_TYP_SRC == DataSourceType.View || data.DSRC_TYP_SRC == DataSourceType.Function)
                     {
+                        //TODO: remove sql injection
                         if (input.Take > 0 && input.Skip != -1 || input.Take == null)
-                            sql.Append("SELECT *  FROM (SELECT ");
+                            sql.AppendFormat("SELECT {0}  FROM (SELECT ", input.Columns.Count > 0 ? String.Join(",", input.Columns) : "*");
                         else
-                            sql.AppendFormat("SELECT {0} *  FROM (SELECT ", input.Take == -1 ? "" : "TOP" + input.Take);
+                            sql.AppendFormat("SELECT {0} {1}  FROM (SELECT ", input.Take == -1 ? "" : "TOP" + input.Take, input.Columns.Count > 0 ? String.Join(",", input.Columns) : "*");
 
                         if (!string.IsNullOrEmpty(data.DSRC_JSO_FIELDS))
                         {
@@ -57,8 +58,8 @@ namespace Smart.Data.Module.Contexts
                             //}
                             foreach (var item in json)
                             {
-                                if (input.Columns.Count > 0 && !input.Columns.Contains(item.name))
-                                    continue;
+                                //if (input.Columns.Count > 0 && !input.Columns.Contains(String.Format("{0}", item.alias)))
+                                //    continue;
                                 sql.AppendFormat("[{0}] AS [{1}],", item.name, item.alias);
                             }
                             sql.Length--;
