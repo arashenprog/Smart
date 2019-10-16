@@ -57,6 +57,8 @@ namespace Smart.Data.Module.Contexts
                             //}
                             foreach (var item in json)
                             {
+                                if (input.Columns.Count > 0 && !input.Columns.Contains(item.name))
+                                    continue;
                                 sql.AppendFormat("[{0}] AS [{1}],", item.name, item.alias);
                             }
                             sql.Length--;
@@ -224,7 +226,10 @@ namespace Smart.Data.Module.Contexts
             }
             //var test = JsonConvert.SerializeObject(_data.Query<dynamic>(re.ToString(), dbparam.ToArray()));
             //return JsonConvert.DeserializeObject<dynamic>(test); ;
-            return _data.Query<dynamic>(re.ToString(), dbparam.ToArray());
+
+            var result = _data.Query<dynamic>(re.ToString(), dbparam.ToArray());
+
+            return result;
         }
 
         //} [WebApi(Route = "api/getDS", Authorized = false, Method = WebApiMethod.Post)]
