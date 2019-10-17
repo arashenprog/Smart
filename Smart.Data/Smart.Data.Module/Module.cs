@@ -11,8 +11,8 @@ namespace Smart.Data.Module
     {
         public void Register(IContainerBuilder builder)
         {
-            builder.AddScope<IData, DapperData>(new DapperData("Server=192.168.25.111;Database=CRM; Integrated Security = true;"));
-            builder.AddScope<IQueryGenerator, QueryGeneratorContext>();
+      
+            builder.AddTransient<IQueryGenerator, QueryGeneratorContext>();
         }
     }
 }

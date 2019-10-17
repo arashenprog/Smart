@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using ACoreX.AssemblyLoader;
 using ACoreX.Authentication.Core;
 using ACoreX.Authentication.JWT;
+using ACoreX.Data.Abstractions;
+using ACoreX.Data.Dapper;
 using ACoreX.Injector.Abstractions;
 using ACoreX.Injector.Core;
 using Microsoft.AspNetCore.Builder;
@@ -32,10 +34,8 @@ namespace Smart.View.Run
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            //services.AddControllers();
-            string libPath = "";
-
-            libPath = Path.Combine(new DirectoryInfo(Environment.CurrentDirectory).Parent.FullName, "lib");
+            string libPath = Configuration["Moduels:Path"];
+            services.AddTransient<IData>(c => { return new DapperData(Configuration["ConnectionString:SQLConnection"]); });
             IContainerBuilder builder = services.AddBuilder(new NetCoreContainerBuilder(services));
             services
            .AddAuthenticationInstance<JWTAuthService>()

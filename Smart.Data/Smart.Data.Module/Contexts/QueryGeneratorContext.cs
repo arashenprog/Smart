@@ -19,7 +19,7 @@ namespace Smart.Data.Module.Contexts
         {
             _data = data;
         }
-        [WebApi(Route = "api/getDS", Authorized = false, Method = WebApiMethod.Post)]
+        [WebApi(Route = "api/data/query", Authorized = false, Method = WebApiMethod.Post)]
         public dynamic Generate(QueryInputParamater input)
         {
             string re = "";

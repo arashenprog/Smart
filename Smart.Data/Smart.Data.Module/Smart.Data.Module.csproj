@@ -4,7 +4,7 @@
     <TargetFramework>netcoreapp3.0</TargetFramework>
     <AssemblyName>Smart.Data.Module</AssemblyName>
     <RootNamespace>Smart.Data.Module</RootNamespace>
-    <Version>1.0.5</Version>
+    <Version>1.0.6</Version>
     <Description>fix data source</Description>
   </PropertyGroup>
 
