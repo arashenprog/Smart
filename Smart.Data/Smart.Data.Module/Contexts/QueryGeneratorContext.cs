@@ -22,20 +22,18 @@ namespace Smart.Data.Module.Contexts
         [WebApi(Route = "api/getDS", Authorized = false, Method = WebApiMethod.Post)]
         public dynamic Generate(QueryInputParamater input)
         {
+            string re = "";
+            List<DBParam> dbparam = new List<DBParam>();
+            IEnumerable<dynamic> result;
             using (SqlConnection cnn = _data.OpenConnection())
             {
-
-
-
-                DataSourceInput data = _data.Query<DataSourceInput>("SELECT Top 1 * FROM ADM.ADM_DATA_SOURCES WHERE DSRC_COD=@P1",
-                    new DBParam { Name = "@P1", Value = input.Code }).FirstOrDefault();
-                string re = "";
-                List<DBParam> dbparam = new List<DBParam>();
-                if (data != null)
+                try
                 {
-                    try
-                    {
+                    DataSourceInput data = _data.Query<DataSourceInput>("SELECT Top 1 * FROM ADM.ADM_DATA_SOURCES WHERE DSRC_COD=@P1",
+                    new DBParam { Name = "@P1", Value = input.Code }).FirstOrDefault();
 
+                    if (data != null)
+                    {
                         var sql = new StringBuilder();
                         // View And Tables
                         if (data.DSRC_TYP_SRC == DataSourceType.Table || data.DSRC_TYP_SRC == DataSourceType.View || data.DSRC_TYP_SRC == DataSourceType.Function)
@@ -218,116 +216,125 @@ namespace Smart.Data.Module.Contexts
                             //}
                             //
                             //return ;
+
+                            result = _data.Query<dynamic>(re.ToString(), dbparam.ToArray());
+                            _data.Dispose();
+                            return result;
                         }
                     }
-                    catch (Exception ex)
-                    {
-                        //UnitOfWork.Context.ClearChanges();
-                        throw ex;
-                    }
-                    finally
-                    {
-                        // UnitOfWork.Context.CloseConnection();
-                    }
                 }
-            
+                catch (Exception ex)
+                {
+                    _data.Dispose();
+
+                    throw ex;
+                }
+                finally
+                {
+                    _data.Dispose();
+                }
+
+                return null;
+            }
+
             //var test = JsonConvert.SerializeObject(_data.Query<dynamic>(re.ToString(), dbparam.ToArray()));
             //return JsonConvert.DeserializeObject<dynamic>(test); ;
 
-            var result = _data.Query<dynamic>(re.ToString(), dbparam.ToArray());
-                     return result;
-            }
-           
+
+
+
         }
 
-        //} [WebApi(Route = "api/getDS", Authorized = false, Method = WebApiMethod.Post)]
-        //public dynamic Generate(QueryInputParamater input)
-        //{
-
-        //    DataSourceInput result = _data.Query<DataSourceInput>("SELECT Top 1 * FROM ADM.ADM_DATA_SOURCES WHERE DSRC_COD=@P1",
-        //        new DBParam { Name = "@P1", Value = input.Code }).FirstOrDefault();
-        //    string re = "";
-        //    List<DBParam> dbparam = new List<DBParam>();
-        //    if (result != null)
-        //    {
-        //        StringBuilder sb = new StringBuilder();
-        //        if (result.DSRC_TYP_SRC == DataSourceType.Table || result.DSRC_TYP_SRC == DataSourceType.View)
-        //        {
-
-        //            sb.Append("SELECT");
-        //            if (!string.IsNullOrEmpty(result.DSRC_JSO_FIELDS))
-        //            {
-        //                dynamic json = JsonConvert.DeserializeObject(result.DSRC_JSO_FIELDS);
-        //                for (int i = 0; i < json.Count; i++)
-        //                {
-        //                    if (i == json.Count - 1)
-        //                    {
-        //                        sb.AppendFormat(" {0} as {1} ", json[i].name, json[i].alias);
-        //                    }
-        //                    else
-        //                    {
-        //                        sb.AppendFormat(" {0} as {1},", json[i].name, json[i].alias);
-        //                    }
-
-        //                }
-
-        //            }
-        //            sb.AppendFormat("FROM {0} ", result.DSRC_SRC);
-
-        //            if (input.Filters != null && !string.IsNullOrEmpty(result.DSRC_QRY_PARAMS))
-        //            {
-
-        //                Match queryparameters = Regex.Match(result.DSRC_QRY_PARAMS.ToString(), @"\@([^=<>\s\']+)");
-        //                for (int j = 0; j < input.Filters.Count; j++)
-        //                {
-        //                    foreach (object param in queryparameters.Captures)
-        //                    {
-        //                        QueryFilterItems item = input.Filters[j];
-        //                        string stringparam = param.ToString();
-        //                        //if (stringparam == item.FieldName)
-        //                        //{
-        //                        //stringparam = param.ToString().Replace("@", "");
-        //                        sb.AppendFormat(" WHERE {0} {1} {2} ", item.FieldName, item.Operator == QueryFilterOperator.Equal ? "=" : "", param.ToString());
-        //                        //sb.AppendFormat("WHERE ");
-        //                        //sb.AppendFormat(result.DSRC_QRY_PARAMS.ToString().Replace(param.ToString(), " '" + item.Value.ToString() + "' "));
-        //                        dbparam = new List<DBParam>
-        //                        {
-        //                            new DBParam { Name = param.ToString(), Value = item.Value }
-        //                        };
-        //                        //}
-
-
-        //                    }
-
-        //                }
-
-        //            }
-        //            //if (!string.IsNullOrEmpty(result.DSRC_ORDER))
-        //            //{
-        //            //    sb.AppendFormat(" ORDER BY {0} ", result.DSRC_ORDER);
-        //            //}
-
-
-        //            ////sb.AppendFormat("OFFSET {0} ROWS ", input.Skip.ToString());
-
-
-        //            //if (input.Take != 0)
-        //            //{
-        //            //    sb.AppendFormat("FETCH NEXT {0} ROWS ONLY", input.Take.ToString());
-        //            //}
-
-
-        //        }
-        //        else if (result.DSRC_TYP_SRC == DataSourceType.Function)
-        //        {
-
-        //        }
-        //        re = sb.ToString();
-        //    }
-        //   return JsonConvert.SerializeObject(_data.Query<dynamic>(re));
-
-
-        //}
-
     }
+
+    //} [WebApi(Route = "api/getDS", Authorized = false, Method = WebApiMethod.Post)]
+    //public dynamic Generate(QueryInputParamater input)
+    //{
+
+    //    DataSourceInput result = _data.Query<DataSourceInput>("SELECT Top 1 * FROM ADM.ADM_DATA_SOURCES WHERE DSRC_COD=@P1",
+    //        new DBParam { Name = "@P1", Value = input.Code }).FirstOrDefault();
+    //    string re = "";
+    //    List<DBParam> dbparam = new List<DBParam>();
+    //    if (result != null)
+    //    {
+    //        StringBuilder sb = new StringBuilder();
+    //        if (result.DSRC_TYP_SRC == DataSourceType.Table || result.DSRC_TYP_SRC == DataSourceType.View)
+    //        {
+
+    //            sb.Append("SELECT");
+    //            if (!string.IsNullOrEmpty(result.DSRC_JSO_FIELDS))
+    //            {
+    //                dynamic json = JsonConvert.DeserializeObject(result.DSRC_JSO_FIELDS);
+    //                for (int i = 0; i < json.Count; i++)
+    //                {
+    //                    if (i == json.Count - 1)
+    //                    {
+    //                        sb.AppendFormat(" {0} as {1} ", json[i].name, json[i].alias);
+    //                    }
+    //                    else
+    //                    {
+    //                        sb.AppendFormat(" {0} as {1},", json[i].name, json[i].alias);
+    //                    }
+
+    //                }
+
+    //            }
+    //            sb.AppendFormat("FROM {0} ", result.DSRC_SRC);
+
+    //            if (input.Filters != null && !string.IsNullOrEmpty(result.DSRC_QRY_PARAMS))
+    //            {
+
+    //                Match queryparameters = Regex.Match(result.DSRC_QRY_PARAMS.ToString(), @"\@([^=<>\s\']+)");
+    //                for (int j = 0; j < input.Filters.Count; j++)
+    //                {
+    //                    foreach (object param in queryparameters.Captures)
+    //                    {
+    //                        QueryFilterItems item = input.Filters[j];
+    //                        string stringparam = param.ToString();
+    //                        //if (stringparam == item.FieldName)
+    //                        //{
+    //                        //stringparam = param.ToString().Replace("@", "");
+    //                        sb.AppendFormat(" WHERE {0} {1} {2} ", item.FieldName, item.Operator == QueryFilterOperator.Equal ? "=" : "", param.ToString());
+    //                        //sb.AppendFormat("WHERE ");
+    //                        //sb.AppendFormat(result.DSRC_QRY_PARAMS.ToString().Replace(param.ToString(), " '" + item.Value.ToString() + "' "));
+    //                        dbparam = new List<DBParam>
+    //                        {
+    //                            new DBParam { Name = param.ToString(), Value = item.Value }
+    //                        };
+    //                        //}
+
+
+    //                    }
+
+    //                }
+
+    //            }
+    //            //if (!string.IsNullOrEmpty(result.DSRC_ORDER))
+    //            //{
+    //            //    sb.AppendFormat(" ORDER BY {0} ", result.DSRC_ORDER);
+    //            //}
+
+
+    //            ////sb.AppendFormat("OFFSET {0} ROWS ", input.Skip.ToString());
+
+
+    //            //if (input.Take != 0)
+    //            //{
+    //            //    sb.AppendFormat("FETCH NEXT {0} ROWS ONLY", input.Take.ToString());
+    //            //}
+
+
+    //        }
+    //        else if (result.DSRC_TYP_SRC == DataSourceType.Function)
+    //        {
+
+    //        }
+    //        re = sb.ToString();
+    //    }
+    //   return JsonConvert.SerializeObject(_data.Query<dynamic>(re));
+
+
+    //}
+
 }
+
