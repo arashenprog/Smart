@@ -8,4 +8,8 @@
     <Exec Command="copy /Y &quot;$(TargetDir)$(ProjectName).dll&quot; &quot;$(SolutionDir)lib\$(ProjectName).dll&quot;" />
   </Target>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Smart.Data\Smart.Data.Abstractions\Smart.Data.Abstractions.csproj" />
+  </ItemGroup>
+
 </Project>

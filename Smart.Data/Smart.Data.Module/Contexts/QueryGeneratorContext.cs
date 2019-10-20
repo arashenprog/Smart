@@ -122,13 +122,17 @@ namespace Smart.Data.Module.Contexts
                                 if (input.Take > 0 && input.Skip != -1)
                                 {
                                     totalCount = _data.Query<long>(String.Format("SELECT COUNT(*) FROM ({0}) X", sql.ToString()), dbparam.ToArray()).FirstOrDefault();
-                                    sql.AppendFormat(" ORDER BY {0} ", orderBY);
-                                    sql.AppendFormat("OFFSET ({0}) ROWS ", input.Skip);
-                                    sql.AppendFormat("FETCH NEXT {0} ROWS ONLY", input.Take);
+                                    if (!string.IsNullOrEmpty(orderBY))
+                                    {
+                                        sql.AppendFormat(" ORDER BY {0} ", orderBY);
+                                        sql.AppendFormat("OFFSET ({0}) ROWS ", input.Skip);
+                                        sql.AppendFormat("FETCH NEXT {0} ROWS ONLY", input.Take);
+                                    }
                                 }
                                 else
                                 {
-                                    sql.AppendFormat(" ORDER BY {0} ", orderBY);
+                                    if (!string.IsNullOrEmpty(orderBY))
+                                        sql.AppendFormat(" ORDER BY {0} ", orderBY);
                                 }
                                 re = sql.ToString();
                                 //

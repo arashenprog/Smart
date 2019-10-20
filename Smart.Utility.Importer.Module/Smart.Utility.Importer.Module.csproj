@@ -10,6 +10,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Smart.Data\Smart.Data.Module\Smart.Data.Module.csproj" />
     <ProjectReference Include="..\Smart.Security.Autentication\Smart.Security.Autentication.Module\Smart.Security.Autentication.Module.csproj" />
     <ProjectReference Include="..\Smart.Utility.Importer.Contracts\Smart.Utility.Importer.Contracts.csproj" />
   </ItemGroup>
