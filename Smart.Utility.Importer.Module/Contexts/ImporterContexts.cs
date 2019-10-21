@@ -24,14 +24,14 @@ namespace Smart.Utility.Importer.Module.Contexts
         }
 
 
-        [WebApi(Route = "/api/utility/import",Method =WebApiMethod.Post)]
+        [WebApi(Route = "/api/utility/import", Method = WebApiMethod.Post)]
         public string ImportProduct(QueryInputParamater input)
         {
             //var getProductFields = _data.Query<EntityField>("select * from ADM.ADM_ENTITY_FIELDS where ETFD_ENTT_ID = @P1",
             //                    new DBParam { Name = "@P1", Value = "e4350589-45eb-e911-b511-d850e641f96f" });
             var importProfileFields = new QueryGeneratorContext(_data).Generate(input);
 
-         
+
 
             string filePath = @"D:/test.xlsx";
             FileInfo file = new FileInfo(filePath);
@@ -46,33 +46,66 @@ namespace Smart.Utility.Importer.Module.Contexts
 
                 var rawText = string.Empty;
                 StringBuilder sb = new StringBuilder();
+                sb.AppendFormat("INSERT INTO {0} (", importProfileFields[0].EntitySource);
+                foreach (var item in importProfileFields)
+                {
+                    sb.AppendFormat("{0},", item.EntityFieldName);
+
+                }
+                sb.Length--;
+                sb.AppendFormat(" )");
+                sb.AppendFormat(" VALUES ");
+
+                StringBuilder valuesStr = new StringBuilder();
 
                 for (int row = 2; row <= rowCount; row++)
                 {
-                    //for (int col = 1; col <= ColCount; col++)
-                    //{
-                    // This is just for demo purposes
-                    // rawText += worksheet.Cells[row, col].Value.ToString() + "\t";
-                    sb.AppendFormat("INSERT INTO {0} (", importProfileFields[0].EntitySource);
-                    foreach (var item in importProfileFields)
+                    valuesStr.AppendFormat("(");
+                    for (int col = 1; col <= ColCount; col++)
                     {
-                       
-                        sb.AppendFormat(" {1} ", item.EntityFieldName);
-
-
+                        //if (importProfileFields[col - 1].EntityImportFieldExcelColName == worksheet.Cells[1, col].Value.ToString())
+                            valuesStr.AppendFormat("{0},", worksheet.Cells[row, col].Value.ToString());
                     }
-                    sb.AppendFormat(")");
-
-
-
-                    var result = _data.Query<Products>(" {EntitySource} (PRDT_NAME,	PRDT_TYPE,	PRDT_BRAND) VALUES(@P1,@P2,@P3); ",
-                                new DBParam { Name = "@P1", Value = worksheet.Cells[row, 1].Value.ToString() },
-                                new DBParam { Name = "@P2", Value = worksheet.Cells[row, 2].Value.ToString() },
-                                new DBParam { Name = "@P3", Value = worksheet.Cells[row, 3].Value.ToString() }
-            );
-                    //}
-                    rawText += "\r\n";
+                    valuesStr.Length--;
+                    valuesStr.AppendFormat("),");
                 }
+                valuesStr.Length--;
+                //var Value = "Values (";
+                //for (int col = 1; col <= ColCount; col++)
+                //{
+                //    Value = worksheet.Cells[1, col].Value.ToString();
+
+                //foreach (var item in importProfileFields)
+                //{
+                //    if (Value == item.EntityImportFieldExcelColName)
+                //    {
+
+                //    }
+                //    sb.AppendFormat(" {0}, ", item.EntityFieldName);
+
+                //}
+
+
+                //}
+
+                //for (int col = 1; col <= ColCount; col++)
+                //{
+                // This is just for demo purposes
+                // rawText += worksheet.Cells[row, col].Value.ToString() + "\t";
+
+
+
+                string res = sb.Append(valuesStr).ToString();
+
+
+                //        var result = _data.Query<Products>(" {EntitySource} (PRDT_NAME,	PRDT_TYPE,	PRDT_BRAND) VALUES(@P1,@P2,@P3); ",
+                //                    new DBParam { Name = "@P1", Value = worksheet.Cells[row, 1].Value.ToString() },
+                //                    new DBParam { Name = "@P2", Value = worksheet.Cells[row, 2].Value.ToString() },
+                //                    new DBParam { Name = "@P3", Value = worksheet.Cells[row, 3].Value.ToString() }
+                //);
+                //}
+                rawText += "\r\n";
+
                 return rawText;
             }
         }
