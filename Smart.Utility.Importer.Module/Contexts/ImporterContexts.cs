@@ -47,11 +47,25 @@ namespace Smart.Utility.Importer.Module.Contexts
                 var rawText = string.Empty;
                 StringBuilder sb = new StringBuilder();
                 sb.AppendFormat("INSERT INTO {0} (", importProfileFields[0].EntitySource);
-                foreach (var item in importProfileFields)
-                {
-                    sb.AppendFormat("{0},", item.EntityFieldName);
+                //foreach (var item in importProfileFields)
+                //{
+                //    sb.AppendFormat("{0},", item.EntityFieldName);
 
+                //}
+
+                for (int col = 1; col <= ColCount; col++)
+                {
+                    foreach (var item in importProfileFields)
+                    {
+                        if (item.EntityImportFieldExcelColName == worksheet.Cells[1, col].Value.ToString())
+                        {
+                            sb.AppendFormat("{0},", item.EntityImportFieldExcelColName);
+                        }
+                    }
                 }
+                sb.Length--;
+
+
                 sb.Length--;
                 sb.AppendFormat(" )");
                 sb.AppendFormat(" VALUES ");
@@ -64,7 +78,7 @@ namespace Smart.Utility.Importer.Module.Contexts
                     for (int col = 1; col <= ColCount; col++)
                     {
                         //if (importProfileFields[col - 1].EntityImportFieldExcelColName == worksheet.Cells[1, col].Value.ToString())
-                            valuesStr.AppendFormat("{0},", worksheet.Cells[row, col].Value.ToString());
+                        valuesStr.AppendFormat("{0},", worksheet.Cells[row, col].Value.ToString());
                     }
                     valuesStr.Length--;
                     valuesStr.AppendFormat("),");
