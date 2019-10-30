@@ -9,9 +9,12 @@
     <PackageReference Include="ACoreX.Authentication.Abstractions" Version="1.0.1" />
     <PackageReference Include="ACoreX.Authentication.Core" Version="1.0.1" />
     <PackageReference Include="ACoreX.Authentication.JWT" Version="1.0.1" />
+    <PackageReference Include="ACoreX.Data.Abstractions" Version="1.0.6" />
+    <PackageReference Include="ACoreX.Data.Dapper" Version="1.0.8" />
     <PackageReference Include="ACoreX.Extensions.Types" Version="1.0.1" />
     <PackageReference Include="ACoreX.Injector.Abstractions" Version="1.0.3" />
     <PackageReference Include="ACoreX.Injector.Core" Version="1.0.1" />
+    <PackageReference Include="ACoreX.WebAPI" Version="1.0.1" />
     <PackageReference Include="Dapper" Version="2.0.30" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.0.0" />
