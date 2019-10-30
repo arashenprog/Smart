@@ -11,6 +11,7 @@ namespace Smart.Utility.Importer.Module
         public void Register(IContainerBuilder builder)
         {
             builder.AddTransient<IImporterContext, ImporterContexts>();
+            builder.AddTransient<IUploadContext, UploadContext>();
         }
     }
 }

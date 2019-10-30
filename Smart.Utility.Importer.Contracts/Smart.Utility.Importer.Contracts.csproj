@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.0</TargetFramework>
@@ -9,7 +9,24 @@
   </Target>
 
   <ItemGroup>
+    <Compile Remove="Models\Contacts.cs" />
+    <Compile Remove="Models\Entities.cs" />
+    <Compile Remove="Models\EntityField.cs" />
+    <Compile Remove="Models\Partners.cs" />
+    <Compile Remove="Models\PartnersProducts.cs" />
+    <Compile Remove="Models\PartnersServices.cs" />
+    <Compile Remove="Models\PartnersType.cs" />
+    <Compile Remove="Models\Products.cs" />
+    <Compile Remove="Models\ProductsCategory.cs" />
+    <Compile Remove="Models\Services.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Smart.Data\Smart.Data.Abstractions\Smart.Data.Abstractions.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" />
   </ItemGroup>
 
 </Project>

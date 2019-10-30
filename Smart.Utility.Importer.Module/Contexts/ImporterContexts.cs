@@ -1,15 +1,13 @@
 ﻿using ACoreX.Data.Abstractions;
 using ACoreX.WebAPI;
-using Crm.Data.Entities;
-using CRM.Data.Entities;
 using OfficeOpenXml;
 using Smart.Utility.Importer.Contracts.Contracts;
 using Smart.Data.Module.Contexts;
-using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using Smart.Data.Abstractions.Models;
+using Smart.Utility.Importer.Contracts.Models;
+using System;
 
 namespace Smart.Utility.Importer.Module.Contexts
 {
@@ -31,14 +29,13 @@ namespace Smart.Utility.Importer.Module.Contexts
             //                    new DBParam { Name = "@P1", Value = "e4350589-45eb-e911-b511-d850e641f96f" });
             var importProfileFields = new QueryGeneratorContext(_data).Generate(input);
 
+            if (input.SearchExp== null || input.SearchExp.Length == 0)
+                throw new Exception("Please select the File");
 
+            var fileDataByteArray = Convert.FromBase64String(input.SearchExp);
+            var fileDataStream = new MemoryStream(fileDataByteArray);
 
-            string filePath = @"D:/test.xlsx";
-            FileInfo file = new FileInfo(filePath);
-
-
-
-            using (ExcelPackage package = new ExcelPackage(file))
+            using (ExcelPackage package = new ExcelPackage(fileDataStream))
             {
                 ExcelWorksheet worksheet = package.Workbook.Worksheets[1];
                 int rowCount = worksheet.Dimension.Rows;
@@ -77,41 +74,15 @@ namespace Smart.Utility.Importer.Module.Contexts
                     valuesStr.AppendFormat("(");
                     for (int col = 1; col <= ColCount; col++)
                     {
-                        //if (importProfileFields[col - 1].EntityImportFieldExcelColName == worksheet.Cells[1, col].Value.ToString())
                         valuesStr.AppendFormat("{0},", worksheet.Cells[row, col].Value.ToString());
                     }
                     valuesStr.Length--;
                     valuesStr.AppendFormat("),");
                 }
                 valuesStr.Length--;
-                //var Value = "Values (";
-                //for (int col = 1; col <= ColCount; col++)
-                //{
-                //    Value = worksheet.Cells[1, col].Value.ToString();
-
-                //foreach (var item in importProfileFields)
-                //{
-                //    if (Value == item.EntityImportFieldExcelColName)
-                //    {
-
-                //    }
-                //    sb.AppendFormat(" {0}, ", item.EntityFieldName);
-
-                //}
-
-
-                //}
-
-                //for (int col = 1; col <= ColCount; col++)
-                //{
-                // This is just for demo purposes
-                // rawText += worksheet.Cells[row, col].Value.ToString() + "\t";
-
-
-
                 string res = sb.Append(valuesStr).ToString();
 
-
+                var result = _data.Query<dynamic>(res);
                 //        var result = _data.Query<Products>(" {EntitySource} (PRDT_NAME,	PRDT_TYPE,	PRDT_BRAND) VALUES(@P1,@P2,@P3); ",
                 //                    new DBParam { Name = "@P1", Value = worksheet.Cells[row, 1].Value.ToString() },
                 //                    new DBParam { Name = "@P2", Value = worksheet.Cells[row, 2].Value.ToString() },
