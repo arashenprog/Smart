@@ -11,6 +11,6 @@ namespace Smart.Utility.Importer.Contracts.Contracts
 {
     public interface IUploadContext
     {
-        MemoryStream UploadBase64(Upload upload);
+        MemoryStream UploadBase64(UploadBase upload);
     }
 }

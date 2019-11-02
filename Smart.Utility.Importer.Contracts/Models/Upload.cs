@@ -5,9 +5,14 @@ using System.Text;
 
 namespace Smart.Utility.Importer.Contracts.Models
 {
-    public class Upload
+    public class UploadBase
     {
-        public string base64String { get; set; }
-        //public IFormFile Image { get; set; }
+        public string Name { get; set; }
+        public string Base64String { get; set; }
+    }
+    public class UploadFile
+    {
+        public string Name { get; set; }
+        public byte[] Content { get; set; }
     }
 }
