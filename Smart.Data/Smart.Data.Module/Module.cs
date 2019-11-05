@@ -9,9 +9,9 @@ namespace Smart.Data.Module
     {
         public void Register(IContainerBuilder builder)
         {
-
+      
             builder.AddTransient<IQueryGenerator, QueryGeneratorContext>();
-            builder.AddTransient<ICRUDGeneral, CrudGeneralContext>();
+            builder.AddTransient<IEntitiesNoteContext, EntitiesNoteContext>();
         }
     }
 }
