@@ -1,6 +1,4 @@
-﻿using ACoreX.Data.Abstractions;
-using ACoreX.Data.Dapper;
-using ACoreX.Injector.Abstractions;
+﻿using ACoreX.Injector.Abstractions;
 using Smart.Data.Abstractions.Contracts;
 using Smart.Data.Module.Contexts;
 using System;
@@ -13,6 +11,7 @@ namespace Smart.Data.Module
         {
       
             builder.AddTransient<IQueryGenerator, QueryGeneratorContext>();
+            builder.AddTransient<IEntitiesNoteContext, EntitiesNoteContext>();
         }
     }
 }

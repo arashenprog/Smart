@@ -111,7 +111,7 @@ namespace Smart.Data.Module.Contexts
                                 //else
                                 if (!string.IsNullOrWhiteSpace(data.DSRC_ORDER))
                                 {
-                                    orderBY = $"[{data.DSRC_ORDER}]";
+                                    orderBY = data.DSRC_ORDER;
                                 }
                                 //else if (data.ADM_DYNAMIC_FORM_ITEMs.Any())
                                 //{

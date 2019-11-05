@@ -16,7 +16,6 @@
 
   <ItemGroup>
     <PackageReference Include="ACoreX.Data.Abstractions" Version="1.0.6" />
-    <PackageReference Include="ACoreX.Data.Dapper" Version="1.0.8" />
     <PackageReference Include="ACoreX.Injector.Abstractions" Version="1.0.3" />
     <PackageReference Include="ACoreX.WebAPI" Version="1.0.1" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
