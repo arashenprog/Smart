@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="ACoreX.Data.Abstractions" Version="1.0.7" />
+    <PackageReference Include="ACoreX.Data.Abstractions" Version="1.0.8" />
     <PackageReference Include="ACoreX.Injector.Abstractions" Version="1.0.3" />
     <PackageReference Include="ACoreX.WebAPI" Version="1.0.1" />
   </ItemGroup>
