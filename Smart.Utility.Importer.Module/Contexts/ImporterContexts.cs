@@ -41,8 +41,9 @@ namespace Smart.Utility.Importer.Module.Contexts
             if (input.SearchExp == null || input.SearchExp.Length == 0)
                 throw new Exception("Please select the File");
 
-            var fileDataByteArray = Convert.FromBase64String(input.SearchExp);
+           var fileDataByteArray = Convert.FromBase64String(input.SearchExp.Substring(input.SearchExp.IndexOf(",") + 1));
             var fileDataStream = new MemoryStream(fileDataByteArray);
+            //var fileDataStream = new MemoryStream(System.Text.Encoding.UTF8.GetBytes(input.SearchExp));
 
             using (ExcelPackage package = new ExcelPackage(fileDataStream))
             {

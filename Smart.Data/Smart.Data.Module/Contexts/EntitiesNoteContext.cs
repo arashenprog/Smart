@@ -47,7 +47,7 @@ namespace Smart.Data.Module.Contexts
                     p3.Value = data.UserId;
                     p3.IsNullable = true;
 
-                    var result = _data.Execute("[CRM].[CRM_SP_ENTITIES_NOTE_INSERT]", p0,p1,p2,p3);
+                    var result = _data.Execute("[CRM].[CRM_SP_ENTITIES_NOTE_INSERT]",System.Data.CommandType.StoredProcedure, p0,p1,p2,p3);
 
 
                     _data.Dispose();
