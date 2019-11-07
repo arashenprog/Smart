@@ -107,7 +107,7 @@ namespace Smart.Utility.Importer.Module.Contexts
                     //                    new DBParam { Name = "@P3", Value = worksheet.Cells[row, 3].Value.ToString() }
                     //);
                     //}
-                    rawText += "\r\n";
+                    rawText = "success";
 
                     return rawText;
                 }
