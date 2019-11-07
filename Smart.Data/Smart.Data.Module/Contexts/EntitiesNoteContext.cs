@@ -25,7 +25,7 @@ namespace Smart.Data.Module.Contexts
 
         public void InsertNote(EntitiesNoteInputModel data)
         {
-            
+
             using (SqlConnection cnn = _data.OpenConnection())
             {
                 try
@@ -47,7 +47,7 @@ namespace Smart.Data.Module.Contexts
                     p3.Value = data.UserId;
                     p3.IsNullable = true;
 
-                    _data.Execute("[CRM].[CRM_SP_ENTITIES_NOTE_INSERT]", p0,p1,p2,p3);
+                    _data.Execute("[CRM].[CRM_SP_ENTITIES_NOTE_INSERT]", System.Data.CommandType.StoredProcedure, p0, p1, p2, p3);
 
 
                     _data.Dispose();
@@ -60,9 +60,9 @@ namespace Smart.Data.Module.Contexts
                 finally
                 {
                     _data.Dispose();
-                } 
+                }
             }
-              
+
 
 
         }

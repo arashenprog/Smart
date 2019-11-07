@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="ACoreX.AssemblyLoader" Version="1.0.4" />
+    <PackageReference Include="ACoreX.AssemblyLoader" Version="1.0.5" />
     <PackageReference Include="ACoreX.Authentication.Abstractions" Version="1.0.1" />
     <PackageReference Include="ACoreX.Authentication.Core" Version="1.0.1" />
     <PackageReference Include="ACoreX.Authentication.JWT" Version="1.0.1" />

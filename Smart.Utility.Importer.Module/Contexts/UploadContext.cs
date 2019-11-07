@@ -26,17 +26,23 @@ namespace Smart.Utility.Importer.Module.Contexts
             fileDataStream.CopyTo(fileDataStream, 100);
             return fileDataStream;
         }
-        [WebApi(Route = "/api/utility/UploadFile", Method = WebApiMethod.Post)]
-        public MemoryStream UploadFile(UploadBase upload)
+        //[WebApi(Route = "/api/utility/UploadFile", Method = WebApiMethod.Post)]
+        //public MemoryStream UploadFile(UploadBase upload)
+        //{
+        //    if (upload.Base64String == null || upload.Base64String.Length == 0)
+        //        throw new Exception("Please select the File");
+
+        //    var fileDataByteArray = Convert.FromBase64String(upload.Base64String);
+        //    var fileDataStream = new MemoryStream(fileDataByteArray);
+
+        //    fileDataStream.CopyTo(fileDataStream, 100);
+        //    return fileDataStream;
+        //}
+
+        [WebApi(Route = "/api/utility/test", Method = WebApiMethod.Get)]
+        public string UploadFile()
         {
-            if (upload.Base64String == null || upload.Base64String.Length == 0)
-                throw new Exception("Please select the File");
-
-            var fileDataByteArray = Convert.FromBase64String(upload.Base64String);
-            var fileDataStream = new MemoryStream(fileDataByteArray);
-
-            fileDataStream.CopyTo(fileDataStream, 100);
-            return fileDataStream;
+            return "";
         }
     }
 }
