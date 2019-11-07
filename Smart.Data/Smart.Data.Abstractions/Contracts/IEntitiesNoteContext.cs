@@ -7,6 +7,6 @@ namespace Smart.Data.Abstractions.Contracts
 {
     public interface IEntitiesNoteContext
     {
-        void InsertNote(EntitiesNoteInputModel data);
+        int InsertNote(EntitiesNoteInputModel data);
     }
 }

@@ -21,9 +21,9 @@ namespace Smart.Data.Module.Contexts
         {
             _data = input;
         }
-        [WebApi(Route = "CRM/EntitiesNote/Insert", Authorized = false, Method = WebApiMethod.Post)]
+        [WebApi(Route = "api/CRM/EntitiesNote/Insert", Authorized = false, Method = WebApiMethod.Post)]
 
-        public void InsertNote(EntitiesNoteInputModel data)
+        public int InsertNote(EntitiesNoteInputModel data)
         {
             
             using (SqlConnection cnn = _data.OpenConnection())
@@ -36,7 +36,7 @@ namespace Smart.Data.Module.Contexts
 
                     DBParam p1 = new DBParam();
                     p1.Name = "@date";
-                    p1.Value = data.Date;
+                    p1.Value = Convert.ToString(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")); ;
 
                     DBParam p2 = new DBParam();
                     p2.Name = "@note";
@@ -47,10 +47,11 @@ namespace Smart.Data.Module.Contexts
                     p3.Value = data.UserId;
                     p3.IsNullable = true;
 
-                    _data.Execute("[CRM].[CRM_SP_ENTITIES_NOTE_INSERT]", p0,p1,p2,p3);
+                    var result = _data.Execute("[CRM].[CRM_SP_ENTITIES_NOTE_INSERT]", p0,p1,p2,p3);
 
 
                     _data.Dispose();
+                    return result;
                 }
                 catch (Exception)
                 {
