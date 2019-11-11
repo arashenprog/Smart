@@ -7,7 +7,7 @@ namespace Smart.Utility.Importer.Contracts.Contracts
 {
     public interface IImporterContext
     {
-        string ImportProduct(QueryInputParamater input);
+        string ImportProduct(ImportInputParamater input);
         string ImportProductWithFile(QueryInputParamaterWithFile input);
     }
 }
