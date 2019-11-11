@@ -33,7 +33,7 @@ namespace Smart.Utility.Importer.Module.Contexts
             IEnumerable<ImportProfileView> selectedFields = new QueryGeneratorContext(_data).GenerateWithType<ImportProfileView>(queryInput);
 
             var importProfileField = selectedFields.Where(
-                wh => wh.EntityImportID.ToString().ToLower() == input.ImportFieldID.ToString().ToLower());
+                wh => wh.EntityImportID.ToString().ToLower() == input.ImportFieldID.ToString().ToLower()).OrderBy(ob => ob.EntityImportFieldExcelColName);
             var importProfileFields = importProfileField.ToArray();
             if (input.Base64String == null || input.Base64String.Length == 0)
                 throw new Exception("Please select the File");
@@ -49,20 +49,28 @@ namespace Smart.Utility.Importer.Module.Contexts
 
                 var rawText = string.Empty;
                 StringBuilder sb = new StringBuilder();
+                StringBuilder columns = new StringBuilder();
                 sb.AppendFormat("INSERT INTO {0} (", importProfileFields[0].EntitySource);
 
-
-                for (int col = 1; col <= ColCount; col++)
+                var fgnkeyarray = new List<intString>();
+                //for (int col = 1; col <= ColCount; col++)
+                //{
+                foreach (var item in importProfileFields)
                 {
-                    foreach (var item in importProfileFields)
+                    //if (worksheet.Cells[item.EntityImportFieldExcelColName + col].Value != null)
+                    //    if (item.EntityImportFieldExcelColName == worksheet.Cells[1, col].Value.ToString())
+                    //    {
+                    sb.AppendFormat("{0},", item.EntityFieldName);
+
+                    if (!string.IsNullOrEmpty(item.IsForeginKey))
                     {
-                        if (worksheet.Cells[item.EntityImportFieldExcelColName+col].Value != null)
-                            if (item.EntityImportFieldExcelColName == worksheet.Cells[1, col].Value.ToString())
-                            {
-                                sb.AppendFormat("{0},", item.EntityFieldName);
-                            }
+                        fgnkeyarray.Add(new intString { Index = item.ColumnIndex, Relation = item.IsForeginKey });
                     }
+                    // if (item.IsForeginKey)
+
+                    //}
                 }
+                //}
                 sb.Length--;
 
                 sb.AppendFormat(" )");
@@ -70,23 +78,45 @@ namespace Smart.Utility.Importer.Module.Contexts
 
                 StringBuilder valuesStr = new StringBuilder();
 
-                for (int row = 2; row <= rowCount; row++)
+                for (int row = 1; row <= rowCount; row++)
                 {
+                    //columns.AppendFormat(" {0} ",);
                     valuesStr.AppendFormat("(");
                     for (int col = 1; col <= ColCount; col++)
                     {
-                        if(worksheet.Cells[row, col].Value != null)
-                        valuesStr.AppendFormat("'{0}',", worksheet.Cells[row, col].Value.ToString());
-                    }
-                    valuesStr.Length--;
-                    valuesStr.AppendFormat("),");
+                        if (worksheet.Cells[row, col].Value != null)
+                        {
+                            var fgnk = fgnkeyarray.FirstOrDefault(f => f.Index == col);
+                            if (fgnk != null)
+                            {
+
+                                valuesStr.AppendFormat(fgnk.Relation, worksheet.Cells[row, col].Value.ToString());
+                            }
+                            else
+                            {
+
+                                valuesStr.AppendFormat("'{0}',", worksheet.Cells[row, col].Value.ToString());
+                            }
+                        }
+                        else
+                        {
+                            valuesStr.Append("'',");
+                        }
+                    }valuesStr.Length--;
+                valuesStr.AppendFormat("),");
                 }
+
+
+                
+
                 valuesStr.Length--;
                 string res = sb.Append(valuesStr).ToString();
                 using (SqlConnection cnn = _data.OpenConnection())
                 {
                     try
-                    { var result = _data.Query<dynamic>(res); }
+                    {
+                        var result = _data.Query<dynamic>(res);
+                    }
                     catch (Exception ex)
                     {
                         _data.Dispose();
@@ -140,10 +170,6 @@ namespace Smart.Utility.Importer.Module.Contexts
                     {
                         if (item.EntityImportFieldExcelColName == worksheet.Cells[1, col].Value.ToString())
                         {
-                            if (item.IsForeginKey)
-                            {
-
-                            }
                             sb.AppendFormat("{0},", item.EntityFieldName);
                         }
                     }
@@ -201,10 +227,16 @@ namespace Smart.Utility.Importer.Module.Contexts
             public string EntityName { get; set; }
             public string EntitySource { get; set; }
             public string EntityImportFieldExcelColName { get; set; }
-            public bool IsForeginKey { get; set; }
-
+            public string IsForeginKey { get; set; }
+            public int ColumnIndex { get; set; }
         }
 
+        public class intString
+        {
+            public int Index { get; set; }
+            public string Relation { get; set; }
+
+        }
         public class ImportProfileViewGeneralModel
         {
             public Guid ETIM_ID { get; set; }
