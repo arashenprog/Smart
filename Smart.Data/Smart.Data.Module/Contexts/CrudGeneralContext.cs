@@ -31,6 +31,7 @@ namespace Smart.Data.Module.Contexts
                         "SELECT TOP (1) * FROM [CRM].[ADM].[ADM_ENTITIES] where [ENTT_NAME] = @entityName",
                         new DBParam() { Name = "@entityName", Value = entityName }
                         ).FirstOrDefault();
+
                     var column = _Idata.Query<EntityFields>(
                      string.Format(
                          "SELECT TOP (1) *   FROM [CRM].[ADM].[ADM_ENTITY_FIELDS] where [ETFD_ALIAS] = @columnName and [ETFD_ENTT_ID] = '{0}'",
@@ -39,7 +40,7 @@ namespace Smart.Data.Module.Contexts
                      ).FirstOrDefault();
                     StringBuilder sb = new StringBuilder();
 
-                    sb.AppendFormat("DELETE FROM {0} WHERE {1} {2} @param ", entity.ENTT_SOURCE, column.ETFD_NAME);
+                    sb.AppendFormat("DELETE FROM {0} WHERE {1} = @param ", entity.ENTT_SOURCE, column.ETFD_NAME);
                     DBParam p1 = new DBParam { Name = "@param", Value = model.Value };
                     var result = _Idata.Execute(sb.ToString(), commandType: System.Data.CommandType.Text, p1);
                     return Task.CompletedTask;
