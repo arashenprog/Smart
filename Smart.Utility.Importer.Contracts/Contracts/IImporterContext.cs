@@ -9,5 +9,6 @@ namespace Smart.Utility.Importer.Contracts.Contracts
     {
         string ImportProduct(ImportInputParamater input);
         string ImportProductWithFile(QueryInputParamaterWithFile input);
+        string ImportProductForSP(ImportInputParamater input);
     }
 }
