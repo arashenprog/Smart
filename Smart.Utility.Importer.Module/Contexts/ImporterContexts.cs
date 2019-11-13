@@ -50,85 +50,135 @@ namespace Smart.Utility.Importer.Module.Contexts
                 var rawText = string.Empty;
                 StringBuilder sb = new StringBuilder();
                 StringBuilder columns = new StringBuilder();
-                sb.AppendFormat("INSERT INTO {0} (", importProfileFields[0].EntitySource);
-
-                var fgnkeyarray = new List<intString>();
-                //for (int col = 1; col <= ColCount; col++)
-                //{
-                foreach (var item in importProfileFields)
+                if (string.IsNullOrEmpty(importProfileFields[0].SPName))
                 {
-                    //if (worksheet.Cells[item.EntityImportFieldExcelColName + col].Value != null)
-                    //    if (item.EntityImportFieldExcelColName == worksheet.Cells[1, col].Value.ToString())
-                    //    {
-                    sb.AppendFormat("{0},", item.EntityFieldName);
+                    sb.AppendFormat("INSERT INTO {0} (", importProfileFields[0].EntitySource);
 
-                    if (!string.IsNullOrEmpty(item.IsForeginKey))
+                    var fgnkeyarray = new List<intString>();
+                    //for (int col = 1; col <= ColCount; col++)
+                    //{
+                    foreach (var item in importProfileFields)
                     {
-                        fgnkeyarray.Add(new intString { Index = item.ColumnIndex, Relation = item.IsForeginKey });
-                    }
-                    // if (item.IsForeginKey)
+                        //if (worksheet.Cells[item.EntityImportFieldExcelColName + col].Value != null)
+                        //    if (item.EntityImportFieldExcelColName == worksheet.Cells[1, col].Value.ToString())
+                        //    {
+                        sb.AppendFormat("{0},", item.EntityFieldName);
 
-                    //}
-                }
-                //}
-                sb.Length--;
-
-                sb.AppendFormat(" )");
-                sb.AppendFormat(" VALUES ");
-
-                StringBuilder valuesStr = new StringBuilder();
-
-                for (int row = 1; row <= rowCount; row++)
-                {
-                    //columns.AppendFormat(" {0} ",);
-                    valuesStr.AppendFormat("(");
-                    for (int col = 1; col <= ColCount; col++)
-                    {
-                        if (worksheet.Cells[row, col].Value != null)
+                        if (!string.IsNullOrEmpty(item.IsForeginKey))
                         {
-                            var fgnk = fgnkeyarray.FirstOrDefault(f => f.Index == col);
-                            if (fgnk != null)
-                            {
+                            fgnkeyarray.Add(new intString { Index = item.ColumnIndex, Relation = item.IsForeginKey });
+                        }
+                        // if (item.IsForeginKey)
 
-                                valuesStr.AppendFormat(fgnk.Relation, worksheet.Cells[row, col].Value.ToString());
+                        //}
+                    }
+                    //}
+                    sb.Length--;
+
+                    sb.AppendFormat(" )");
+                    sb.AppendFormat(" VALUES ");
+
+                    StringBuilder valuesStr = new StringBuilder();
+
+                    for (int row = 1; row <= rowCount; row++)
+                    {
+                        //columns.AppendFormat(" {0} ",);
+                        valuesStr.AppendFormat("(");
+                        for (int col = 1; col <= ColCount; col++)
+                        {
+                            if (worksheet.Cells[row, col].Value != null)
+                            {
+                                var fgnk = fgnkeyarray.FirstOrDefault(f => f.Index == col);
+                                if (fgnk != null)
+                                {
+
+                                    valuesStr.AppendFormat(fgnk.Relation, worksheet.Cells[row, col].Value.ToString());
+                                }
+                                else
+                                {
+
+                                    valuesStr.AppendFormat("'{0}',", worksheet.Cells[row, col].Value.ToString());
+                                }
                             }
                             else
                             {
-
-                                valuesStr.AppendFormat("'{0}',", worksheet.Cells[row, col].Value.ToString());
+                                valuesStr.Append("'',");
                             }
                         }
-                        else
+                        valuesStr.Length--;
+                        valuesStr.AppendFormat("),");
+                    }
+
+
+
+
+                    valuesStr.Length--;
+                    string res = sb.Append(valuesStr).ToString();
+                    using (SqlConnection cnn = _data.OpenConnection())
+                    {
+                        try
                         {
-                            valuesStr.Append("'',");
+                            var result = _data.Query<dynamic>(res);
+                        }
+                        catch (Exception ex)
+                        {
+                            _data.Dispose();
+                            throw ex;
+                        }
+
+                        rawText = "success";
+
+                        return rawText;
+                    }
+                }
+                else
+                {
+                    for (int row = 1; row <= rowCount; row++)
+                    {
+                        StringBuilder valuesStr = new StringBuilder();
+                        //columns.AppendFormat(" {0} ",);
+                        valuesStr.AppendFormat("[{{");
+                        for (int col = 1; col <= ColCount; col++)
+                        {
+                            if (worksheet.Cells[row, col].Value != null && col < importProfileFields.Length)
+                            {
+                                valuesStr.AppendFormat("'{0}':'{1}',", importProfileFields[col - 0].EntityFieldName, worksheet.Cells[row, col].Value.ToString());
+                            }
+                            //else
+                            //{
+                            //    valuesStr.AppendFormat("customFields:{{");
+                            //    valuesStr.AppendFormat("customFields:{");
+                            //}
+                            //else
+                            //{
+                            //    valuesStr.Append("'',");
+                            //}
+                        }
+                        valuesStr.Length--;
+                        valuesStr.AppendFormat("}}]");
+                        string res = valuesStr.ToString();
+                        DBParam p0 = new DBParam();
+                        p0.Name = "@Json";
+                        p0.Value = res;
+                        using (SqlConnection cnn = _data.OpenConnection())
+                        {
+                            try
+                            {
+                                var result = _data.Execute(importProfileField.FirstOrDefault().SPName, commandType: System.Data.CommandType.StoredProcedure, p0);
+                            }
+                            catch (Exception ex)
+                            {
+                                _data.Dispose();
+                                throw ex;
+                            }
+
+
                         }
                     }
-                    valuesStr.Length--;
-                    valuesStr.AppendFormat("),");
                 }
 
-
-
-
-                valuesStr.Length--;
-                string res = sb.Append(valuesStr).ToString();
-                using (SqlConnection cnn = _data.OpenConnection())
-                {
-                    try
-                    {
-                        var result = _data.Query<dynamic>(res);
-                    }
-                    catch (Exception ex)
-                    {
-                        _data.Dispose();
-                        throw ex;
-                    }
-
-                    rawText = "success";
-
-                    return rawText;
-                }
             }
+            return "success";
         }
 
         [WebApi(Route = "/api/utility/SPimport", Method = WebApiMethod.Post)]
