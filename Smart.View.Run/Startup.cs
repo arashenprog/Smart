@@ -35,8 +35,8 @@ namespace Smart.View.Run
         public void ConfigureServices(IServiceCollection services)
         {
             string libPath = Configuration["Moduels:Path"];
-            services.AddTransient<IData>(c => { return new DapperData(Configuration["ConnectionString:SQLConnection"]); });
             IContainerBuilder builder = services.AddBuilder(new NetCoreContainerBuilder(services));
+            builder.AddTransient<IData, DapperData>(new DapperData(Configuration["ConnectionString:SQLConnection"]));
             services
            .AddAuthenticationInstance<JWTAuthService>()
            .AddCors(options =>

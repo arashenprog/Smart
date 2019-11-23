@@ -9,8 +9,8 @@ namespace Smart.Data.Abstractions.Contracts
 {
     public interface ICRUDGeneral
     {
-        Task Insert(string entityName, GeneralDataModel model);
-        Task Update(string entityName, GeneralDataModel model);
+        Task Insert(string entityName, GeneralInsert model);
+        Task Update(string entityName, GeneralInsert model);
         Task Delete(string entityName, QueryFilterItems model);
 
     }
