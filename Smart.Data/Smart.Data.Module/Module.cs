@@ -12,6 +12,7 @@ namespace Smart.Data.Module
 
             builder.AddTransient<IQueryGenerator, QueryGeneratorContext>();
             builder.AddTransient<IEntitiesNoteContext, EntitiesNoteContext>();
+            builder.AddTransient<ISuppliersProductsContext, SuppliersProductsContext>();
             builder.AddTransient<ICRUDGeneral, CRUDGeneralContext>();
         }
     }

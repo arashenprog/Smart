@@ -62,7 +62,6 @@ namespace Smart.Data.Module.Contexts
                 try
                 {
                     StringBuilder sb = new StringBuilder();
-
                     sb.AppendFormat("Insert Into {0} ({1}) VALUES @param", entityName, model.Columns);
                     DBParam p1 = new DBParam { Name = "@param", Value = model.Values };
                     var result = _Idata.Execute(sb.ToString(), commandType: System.Data.CommandType.Text, p1);
