@@ -8,6 +8,10 @@
     <Description>fix data source</Description>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <PlatformTarget>x64</PlatformTarget>
+  </PropertyGroup>
+
   <ItemGroup>
     <Compile Remove="Contexts\DataSourceInput.cs" />
     <Compile Remove="Contexts\DataSourceType.cs" />
@@ -15,7 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="ACoreX.Data.Abstractions" Version="1.0.8" />
+    <PackageReference Include="ACoreX.Data.Abstractions" Version="1.0.11" />
     <PackageReference Include="ACoreX.Injector.Abstractions" Version="1.0.3" />
     <PackageReference Include="ACoreX.WebAPI" Version="1.0.1" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />

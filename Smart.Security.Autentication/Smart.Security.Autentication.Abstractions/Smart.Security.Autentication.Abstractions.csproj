@@ -9,7 +9,7 @@
   </Target>
 
   <ItemGroup>
-    <PackageReference Include="ACoreX.Data.Abstractions" Version="1.0.8" />
+    <PackageReference Include="ACoreX.Data.Abstractions" Version="1.0.11" />
     <PackageReference Include="ACoreX.Injector.Abstractions" Version="1.0.3" />
   </ItemGroup>
 

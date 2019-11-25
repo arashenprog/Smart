@@ -22,7 +22,7 @@ namespace Smart.Data.Module.Contexts
         public int delete(ProductsSuppliersInputModel data)
         {
 
-            using (SqlConnection cnn = _data.OpenConnection())
+            using (var cnn = _data.OpenConnection())
             {
                 try
                 {
@@ -56,7 +56,7 @@ namespace Smart.Data.Module.Contexts
         [WebApi(Route = "api/CRM/SuppliersProducts/Insert", Authorized = false, Method = WebApiMethod.Post)]
         public int insert(ProductsSuppliersInputModel data)
         {
-            using (SqlConnection cnn = _data.OpenConnection())
+            using (var cnn = _data.OpenConnection())
             {
                 try
                 {

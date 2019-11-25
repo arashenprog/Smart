@@ -21,7 +21,7 @@ namespace Smart.Data.Module.Contexts
         [WebApi(Route = "api/{entityName}/delete", Authorized = false, Method = WebApiMethod.Post)]
         public Task Delete(string entityName, QueryFilterItems model)
         {
-            using (SqlConnection cnn = _Idata.OpenConnection())
+            using (var cnn = _Idata.OpenConnection())
             {
                 try
                 {
@@ -57,7 +57,7 @@ namespace Smart.Data.Module.Contexts
         [WebApi(Route = "api/{entityName}/insert", Authorized = false, Method = WebApiMethod.Post)]
         public Task Insert(string entityName, GeneralInsert model)
         {
-            using (SqlConnection cnn = _Idata.OpenConnection())
+            using (var cnn = _Idata.OpenConnection())
             {
                 try
                 {
@@ -101,7 +101,7 @@ namespace Smart.Data.Module.Contexts
         //TODO: Update function
         public Task Update(string entityName, GeneralInsert model)
         {
-            using (SqlConnection cnn = _Idata.OpenConnection())
+            using (var cnn = _Idata.OpenConnection())
             {
                 try
                 {

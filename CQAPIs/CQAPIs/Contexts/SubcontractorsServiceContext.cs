@@ -22,7 +22,7 @@ namespace Smart.Data.Module.Contexts
 
         public int Insert(SubcontractorsServicesInputModel data)
         {
-            using (SqlConnection cnn = _data.OpenConnection())
+            using (var cnn = _data.OpenConnection())
             {
                 try
                 {
@@ -61,7 +61,7 @@ namespace Smart.Data.Module.Contexts
         public int Delete (SubcontractorsServicesInputModel data)
         {
 
-            using (SqlConnection cnn = _data.OpenConnection())
+            using (var cnn = _data.OpenConnection())
             {
                 try
                 {

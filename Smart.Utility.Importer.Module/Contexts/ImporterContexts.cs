@@ -114,7 +114,7 @@ namespace Smart.Utility.Importer.Module.Contexts
 
                     valuesStr.Length--;
                     string res = sb.Append(valuesStr).ToString();
-                    using (SqlConnection cnn = _data.OpenConnection())
+                    using (var cnn = _data.OpenConnection())
                     {
                         try
                         {
@@ -160,7 +160,7 @@ namespace Smart.Utility.Importer.Module.Contexts
                         DBParam p0 = new DBParam();
                         p0.Name = "@Json";
                         p0.Value = res;
-                        using (SqlConnection cnn = _data.OpenConnection())
+                        using (var cnn = _data.OpenConnection())
                         {
                             try
                             {
@@ -260,7 +260,7 @@ namespace Smart.Utility.Importer.Module.Contexts
                     DBParam p0 = new DBParam();
                     p0.Name = "@Json";
                     p0.Value = res;
-                    using (SqlConnection cnn = _data.OpenConnection())
+                    using (var cnn = _data.OpenConnection())
                     {
                         try
                         {
@@ -351,7 +351,7 @@ namespace Smart.Utility.Importer.Module.Contexts
                 }
                 valuesStr.Length--;
                 string res = sb.Append(valuesStr).ToString();
-                using (SqlConnection cnn = _data.OpenConnection())
+                using (var cnn = _data.OpenConnection())
                 {
                     try
                     { var result = _data.Query<dynamic>(res); }

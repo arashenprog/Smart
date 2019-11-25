@@ -26,7 +26,7 @@ namespace Smart.Data.Module.Contexts
         public int InsertNote(EntitiesNoteInputModel data)
         {
             
-            using (SqlConnection cnn = _data.OpenConnection())
+            using (var cnn = _data.OpenConnection())
             {
                 try
                 {

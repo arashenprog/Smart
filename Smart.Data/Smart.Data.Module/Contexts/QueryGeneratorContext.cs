@@ -25,7 +25,7 @@ namespace Smart.Data.Module.Contexts
             string re = "";
             List<DBParam> dbparam = new List<DBParam>();
             IEnumerable<dynamic> result;
-            using (SqlConnection cnn = _data.OpenConnection())
+            using (var cnn = _data.OpenConnection())
             {
                 try
                 {
@@ -222,38 +222,31 @@ namespace Smart.Data.Module.Contexts
                             //return ;
 
                             result = _data.Query<dynamic>(re.ToString(), dbparam.ToArray());
-                            _data.Dispose();
+                            //_data.Dispose();
                             return result;
                         }
                     }
                 }
                 catch (Exception ex)
                 {
-                    _data.Dispose();
 
                     throw ex;
                 }
-                finally
-                {
-                    _data.Dispose();
-                }
-
-                return null;
+                //finally
+                //{
+                //    _data.Dispose();
+                //}
             }
-
+            return null;
             //var test = JsonConvert.SerializeObject(_data.Query<dynamic>(re.ToString(), dbparam.ToArray()));
             //return JsonConvert.DeserializeObject<dynamic>(test); ;
-
-
-
-
         }
         public IEnumerable<T> GenerateWithType<T>(QueryInputParamater input)
         {
             string re = "";
             List<DBParam> dbparam = new List<DBParam>();
             IEnumerable<T> result;
-            using (SqlConnection cnn = _data.OpenConnection())
+            using (var cnn = _data.OpenConnection())
             {
                 try
                 {
