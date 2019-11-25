@@ -20,9 +20,36 @@ namespace Smart.APIs.Module.Contexts
 
         public int Delete(PartnersContactInputModel data)
         {
+            using (var cnn = _data.OpenConnection())
+            {
+                try
+                {
+                    DBParam p0 = new DBParam();
+                    p0.Name = "@partnersId";
+                    p0.Value = Newtonsoft.Json.JsonConvert.SerializeObject(data.PartnersId);
 
 
-            return 0;
+                    DBParam p1 = new DBParam();
+                    p1.Name = "@contactsId";
+                    p1.Value = Newtonsoft.Json.JsonConvert.SerializeObject(data.ContactsId);
+
+
+                    var result = _data.Execute("[CRM].[CRM_SP_PARTNERS_CONTACTS_INSERT]", System.Data.CommandType.StoredProcedure, p0, p1);
+
+
+                    _data.Dispose();
+                    return result;
+                }
+                catch (Exception)
+                {
+
+                    throw;
+                }
+                finally
+                {
+                    _data.Dispose();
+                }
+            }
         }
 
 
@@ -30,9 +57,36 @@ namespace Smart.APIs.Module.Contexts
 
         public int Insert(PartnersContactInputModel data)
         {
+            using (var cnn = _data.OpenConnection())
+            {
+                try
+                {
+                    DBParam p0 = new DBParam();
+                    p0.Name = "@partnersId";
+                    p0.Value = Newtonsoft.Json.JsonConvert.SerializeObject(data.PartnersId);
 
 
-            return 0;
+                    DBParam p1 = new DBParam();
+                    p1.Name = "@contactsId";
+                    p1.Value = Newtonsoft.Json.JsonConvert.SerializeObject(data.ContactsId);
+
+
+                    var result = _data.Execute("[CRM].[CRM_SP_PARTNERS_CONTACTS_DELETE]", System.Data.CommandType.StoredProcedure, p0, p1);
+
+
+                    _data.Dispose();
+                    return result;
+                }
+                catch (Exception)
+                {
+
+                    throw;
+                }
+                finally
+                {
+                    _data.Dispose();
+                }
+            }
 
         }
     }

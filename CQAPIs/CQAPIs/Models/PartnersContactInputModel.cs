@@ -6,8 +6,8 @@ namespace Smart.APIs.Module.Models
 {
     public class PartnersContactInputModel
     {
-        public List<Guid> SuppliersId { set; get; }
+        public List<Guid> PartnersId { set; get; }
 
-        public List<Guid> ProductsId { set; get; }
+        public List<Guid> ContactsId { set; get; }
     }
 }
