@@ -1,4 +1,5 @@
 ﻿using ACoreX.WebAPI;
+using ACoreX.WebAPI.Abstractions;
 using Smart.Security.Autentication.Abstractions.Contracts;
 using Smart.Security.Autentication.Abstractions.Models;
 using System;

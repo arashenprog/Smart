@@ -13,17 +13,18 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Contexts\CrudGeneralContext.cs" />
     <Compile Remove="Contexts\DataSourceInput.cs" />
     <Compile Remove="Contexts\DataSourceType.cs" />
     <Compile Remove="Contexts\DynamicFormContext.cs" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="ACoreX.Data.Abstractions" Version="1.0.11" />
-    <PackageReference Include="ACoreX.Injector.Abstractions" Version="1.0.3" />
-    <PackageReference Include="ACoreX.WebAPI" Version="1.0.1" />
+    <PackageReference Include="ACoreX.Injector.Abstractions" Version="1.1.1" />
+    <PackageReference Include="ACoreX.WebAPI.Abstractions" Version="1.1.1" />
+    <PackageReference Include="Dapper" Version="2.0.30" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
-    <PackageReference Include="System.Data.SqlClient" Version="4.7.0" />
+    <PackageReference Include="System.Data.SqlClient" Version="4.6.1" />
   </ItemGroup>
 
   <ItemGroup>
@@ -31,7 +32,7 @@
   </ItemGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="copy /Y &quot;$(TargetDir)$(ProjectName).dll&quot; &quot;$(SolutionDir)lib\$(ProjectName).dll&quot;" />
+    <Exec Command="copy /Y &quot;$(TargetDir)$(ProjectName).dll&quot; &quot;c:\ACoreX\Modules\$(ProjectName).dll&quot;" />
   </Target>
 
 </Project>

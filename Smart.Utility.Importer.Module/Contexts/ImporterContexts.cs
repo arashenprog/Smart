@@ -6,12 +6,12 @@ using Smart.Data.Module.Contexts;
 using System.IO;
 using System.Text;
 using Smart.Data.Abstractions.Models;
-using Smart.Utility.Importer.Contracts.Models;
 using System;
 using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using System.Data.SqlClient;
+using ACoreX.WebAPI.Abstractions;
 
 namespace Smart.Utility.Importer.Module.Contexts
 {

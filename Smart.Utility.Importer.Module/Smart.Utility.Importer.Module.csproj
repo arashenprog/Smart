@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="ACoreX.WebAPI" Version="1.0.1" />
+    <PackageReference Include="ACoreX.WebAPI" Version="1.1.1" />
     <PackageReference Include="EPPlus.Core" Version="1.5.4" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" />
   </ItemGroup>

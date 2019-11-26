@@ -1,5 +1,4 @@
-﻿using ACoreX.Data.Abstractions;
-using Smart.Data.Abstractions.Models;
+﻿using Smart.Data.Abstractions.Models;
 using System;
 using System.Collections.Generic;
 using System.Text;
