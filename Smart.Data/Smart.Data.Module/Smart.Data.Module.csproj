@@ -20,6 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="ACoreX.Configurations.Abstractions" Version="1.0.1" />
     <PackageReference Include="ACoreX.Injector.Abstractions" Version="1.1.1" />
     <PackageReference Include="ACoreX.WebAPI.Abstractions" Version="1.1.1" />
     <PackageReference Include="Dapper" Version="2.0.30" />

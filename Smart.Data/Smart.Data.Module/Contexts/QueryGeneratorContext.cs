@@ -1,4 +1,5 @@
-﻿using ACoreX.WebAPI;
+﻿using ACoreX.Configurations.Abstractions;
+using ACoreX.WebAPI;
 using ACoreX.WebAPI.Abstractions;
 using Dapper;
 using Newtonsoft.Json;
@@ -16,17 +17,18 @@ namespace Smart.Data.Module.Contexts
 {
     public class QueryGeneratorContext : IQueryGenerator
     {
-        public QueryGeneratorContext()
+        IConfiguration _configuration;
+        public QueryGeneratorContext(IConfiguration configuration)
         {
+            _configuration = configuration;
         }
 
 
         [WebApi(Route = "api/data/query", Authorized = false, Method = WebApiMethod.Post)]
         public dynamic Generate(QueryInputParamater input)
         {
-            using (IDbConnection conn = new SqlConnection("Server=192.168.25.111;Database=CRM; User ID=ma;password=123"))
+            using (IDbConnection conn = new SqlConnection(_configuration.Get("ConnectionString:SQLConnection")))
             {
-
                 try
                 {
                     IEnumerable<dynamic> result;
@@ -138,7 +140,7 @@ namespace Smart.Data.Module.Contexts
                                     if (!string.IsNullOrEmpty(orderBY))
                                         sql.AppendFormat(" ORDER BY {0} ", orderBY);
                                 }
-                               
+
                                 //
                                 //var sqlData = _data.Query<dynamic>(sql.ToString(), dbparam.ToArray()).ToObjectList();
                                 //result.TotalRowCount = totalCount > 0 ? totalCount : sqlData.LongCount();
