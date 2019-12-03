@@ -6,6 +6,17 @@
         NotEqual,
         Contain,
         NotContain,
+        StartWith,
+        EndWith,
+        IsEmpty,
+        IsNotEmpty,
+        GreaterThan,
+        LessThan,
+        GreaterThanOrEqual,
+        LessThanOrEqual,
+        Between,
+        In
+
     }
 
   

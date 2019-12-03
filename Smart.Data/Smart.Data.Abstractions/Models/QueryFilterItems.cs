@@ -3,8 +3,10 @@
     public class QueryFilterItems
     {
         public string FieldName { get; set; }
-        public QueryFilterOperator Operator { get; set; } = QueryFilterOperator.Equal;
-        public object Value { get; set; }
+        public string Operator { get; set; } = "Equal";
+        public dynamic Value { get; set; }
+
+       
     }
 
   

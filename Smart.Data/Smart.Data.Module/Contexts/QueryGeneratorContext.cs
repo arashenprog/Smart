@@ -3,6 +3,7 @@ using ACoreX.WebAPI;
 using ACoreX.WebAPI.Abstractions;
 using Dapper;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using Smart.Data.Abstractions.Contracts;
 using Smart.Data.Abstractions.Models;
 using System;
@@ -31,6 +32,7 @@ namespace Smart.Data.Module.Contexts
             {
                 try
                 {
+                    
                     IEnumerable<dynamic> result;
                     conn.Open();
                     var args1 = new DynamicParameters();
@@ -92,19 +94,206 @@ namespace Smart.Data.Module.Contexts
                                     // Query Params 
                                     if (!string.IsNullOrWhiteSpace(data.DSRC_QRY_PARAMS))
                                     {
-                                        sql.AppendFormat(" WHERE {0} ", data.DSRC_QRY_PARAMS);
+                                        sql.AppendFormat(" WHERE ( {0} ", data.DSRC_QRY_PARAMS);
                                         var matches = Regex.Matches(data.DSRC_QRY_PARAMS, "@[a-zA-Z0-9_]+");
                                         foreach (Match p in matches)
                                         {
                                             var name = p.Value.Substring(1);
-                                            //if (input.Filters.Any(c => c.FieldName.Equals(name, StringComparison.OrdinalIgnoreCase)))
-                                            //    continue;
+
                                             var item = input.Filters.FirstOrDefault(c => c.FieldName.Equals(name, StringComparison.OrdinalIgnoreCase));
                                             if (item != null)
                                                 dbParams.Add(p.Value, item.Value == null ? null : item.Value.ToString());
                                             else
+                                            {
                                                 dbParams.Add(p.Value, null);
+
+                                            }
+
                                         }
+                                        sql.Append(")");
+                                        foreach (QueryFilterItems q in input.Filters)
+                                        {
+                                            string[] jsonField = new string[3];
+                                            var type = "";
+                                            var Name = "";
+                                            
+
+                                            bool isNewParam = true;
+                                            foreach (var db in dbParams.ParameterNames)
+                                            {
+                                                if (String.Equals(db, q.FieldName, StringComparison.OrdinalIgnoreCase))
+                                                {
+                                                    isNewParam = false;
+                                                }
+                                            }
+
+                                            if (isNewParam)
+                                            {
+                                                if (q.FieldName.Substring(0,1)=="$")
+                                                {
+                                                    jsonField = q.FieldName.Split('.');
+                                                    q.FieldName = jsonField[1];
+
+                                                }
+
+                                                foreach (var it in json)
+                                                {
+                                                    if (it.alias == q.FieldName)
+                                                    {
+                                                        type = it.type;
+                                                        Name = it.name;
+                                                    }
+
+                                                }
+                                                switch (type)
+                                                {
+                                                    case "string":
+                                                        switch (q.Operator)
+                                                        {
+                                                            case "contains":
+                                                                if (q.Value.GetType().Name== "String")
+                                                                {
+                                                                    sql.AppendFormat(" AND ( [{0}] LIKE @{0} )", Name);
+                                                                    dbParams.Add('@' + Name, '%' + (q.Value == null ? null : q.Value.ToString()) + '%');
+                                                                    break;
+                                                                }
+                                                                else
+                                                                {
+                                                                    sql.AppendFormat(" AND ( [{0}] IN ({1}) )", Name, String.Join(',', ((JArray)q.Value)
+                                                                        .ToObject<List<string>>()
+                                                                        .Select(c => 
+                                                                            String.Format("'{0}'", c.Trim().Replace("'","''")))
+                                                                            ));
+                                                                    break;
+                                                                }
+                                                              
+
+                                                            case "end-with":
+                                                                sql.AppendFormat(" AND ( [{0}] LIKE @{0} )", Name);
+                                                                dbParams.Add('@' + Name, '%' + (q.Value == null ? null : q.Value.ToString()));
+                                                                break;
+
+                                                            case "equal":
+
+                                                                sql.AppendFormat(" AND ( [{0}] LIKE @{0} )", Name);
+                                                                dbParams.Add('@' + Name, q.Value == null ? null : q.Value.ToString());
+                                                                break;
+
+                                                            case "is-empty":
+                                                                sql.AppendFormat(" AND ( [{0}] is NULL )", Name);
+                                                                dbParams.Add('@' + Name, q.Value == null ? null : q.Value.ToString());
+                                                                break;
+
+                                                            case "is-not-empty":
+                                                                sql.AppendFormat(" AND ( [{0}] IS NOT NULL )", Name);
+                                                                dbParams.Add('@' + Name, q.Value == null ? null : q.Value.ToString());
+                                                                break;
+
+                                                            case "not-contains":
+                                                                sql.AppendFormat(" AND ( [{0}] IS NOT @{0} )", Name);
+                                                                dbParams.Add('@' + Name, '%' + (q.Value == null ? null : q.Value.ToString()) + '%');
+                                                                break;
+
+                                                            case "not-equal":
+
+                                                                sql.AppendFormat(" AND ( [{0}] NOT LIKE @{0} )", Name);
+                                                                dbParams.Add('@' + Name, q.Value == null ? null : q.Value.ToString());
+                                                                break;
+
+                                                            case "start-with":
+                                                                sql.AppendFormat(" AND ( [{0}] LIKE @{0} )", Name);
+                                                                dbParams.Add('@' + Name, (q.Value == null ? null : q.Value.ToString()) + '%');
+                                                                break;
+                                                            case "In":
+                                                                //  sql.AppendFormat(" AND ( {0} IN (@{0}) )", Name);
+                                                                // dbParams.Add('@' + Name, q.Value == null ? null : q.Value.ToString());
+                                                                break;
+                                                        }
+
+                                                        break;
+                                                    case "Number":
+                                                        switch (q.Operator)
+                                                        {
+                                                            case "equal":
+                                                                sql.AppendFormat(" AND ( [{0}] = @{0} )", Name);
+                                                                dbParams.Add('@' + Name, q.Value == null ? null : q.Value.ToString());
+                                                                break;
+
+                                                            case "not-equal":
+                                                                sql.AppendFormat(" AND ( [{0}] <> @{0} )", Name);
+                                                                dbParams.Add('@' + Name, q.Value == null ? null : q.Value.ToString());
+                                                                break;
+
+                                                            case "greater-than":
+                                                                sql.AppendFormat(" AND ( [{0}] > @{0} )", Name);
+                                                                dbParams.Add('@' + Name, q.Value == null ? null : q.Value.ToString());
+                                                                break;
+
+                                                            case "greater-than-equal":
+                                                                sql.AppendFormat(" AND ( [{0}] >= @{0} )", Name);
+                                                                dbParams.Add('@' + Name, q.Value == null ? null : q.Value.ToString());
+                                                                break;
+
+                                                            case "less-than":
+                                                                sql.AppendFormat(" AND ( [{0}] < @{0} )", Name);
+                                                                dbParams.Add('@' + Name, q.Value == null ? null : q.Value.ToString());
+                                                                break;
+
+                                                            case "less-than-equal":
+                                                                sql.AppendFormat(" AND ( [{0}] <= @{0} )", Name);
+                                                                dbParams.Add('@' + Name, q.Value == null ? null : q.Value.ToString());
+                                                                break;
+                                                            case "is-empty":
+                                                                sql.AppendFormat(" AND ( [{0}] is NULL )", Name);
+                                                                dbParams.Add('@' + Name, q.Value == null ? null : q.Value.ToString());
+                                                                break;
+
+                                                            case "is-not-empty":
+                                                                sql.AppendFormat(" AND ( [{0}] IS NOT NULL )", Name);
+                                                                dbParams.Add('@' + Name, q.Value == null ? null : q.Value.ToString());
+                                                                break;
+
+                                                            case "Between":
+                                                                //  sql.AppendFormat(" AND ( {0} BETWEEN @1{0} AND @2{0} )", Name);
+                                                                //  dbParams.Add('@'+'1'+ Name, q.Value == null ? null : q.Value.ToString());
+                                                                // dbParams.Add('@' + '2' + Name, q.Value == null ? null : q.Value.ToString());
+
+                                                                break;
+
+                                                            case "In":
+                                                                //  sql.AppendFormat(" AND ( {0} IN (@{0}) )", Name);
+                                                                // dbParams.Add('@' + Name, q.Value == null ? null : q.Value.ToString());
+                                                                break;
+                                                        }
+                                                        break;
+
+                                                    case "json":
+                                                        switch (q.Operator)
+                                                        {
+                                                            case "contains":
+
+
+                                                                sql.AppendFormat(" AND (  JSON_VALUE( [{0}] , '$.{1}' ) IN ({2})    )", Name, jsonField[2], String.Join(',', ((JArray)q.Value)
+                                                                        .ToObject<List<string>>()
+                                                                        .Select(c =>
+                                                                            String.Format("'{0}'", c.Trim().Replace("'", "''")))
+                                                                            ));
+
+
+                                                                break;
+                                                        }
+                                                        break;
+
+                                                    case "":
+                                                        return "your Filter Parameters is not Defined";
+
+                                                }
+
+                                            }
+
+
+                                        }
+
                                     }
                                 }
                                 sql.Append(") T");
