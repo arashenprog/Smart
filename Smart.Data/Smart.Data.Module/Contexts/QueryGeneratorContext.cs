@@ -32,7 +32,7 @@ namespace Smart.Data.Module.Contexts
             {
                 try
                 {
-                    
+
                     IEnumerable<dynamic> result;
                     conn.Open();
                     var args1 = new DynamicParameters();
@@ -116,7 +116,7 @@ namespace Smart.Data.Module.Contexts
                                             string[] jsonField = new string[3];
                                             var type = "";
                                             var Name = "";
-                                            
+
 
                                             bool isNewParam = true;
                                             foreach (var db in dbParams.ParameterNames)
@@ -129,7 +129,7 @@ namespace Smart.Data.Module.Contexts
 
                                             if (isNewParam)
                                             {
-                                                if (q.FieldName.Substring(0,1)=="$")
+                                                if (q.FieldName.Substring(0, 1) == "$")
                                                 {
                                                     jsonField = q.FieldName.Split('.');
                                                     q.FieldName = jsonField[1];
@@ -151,7 +151,7 @@ namespace Smart.Data.Module.Contexts
                                                         switch (q.Operator)
                                                         {
                                                             case "contains":
-                                                                if (q.Value.GetType().Name== "String")
+                                                                if (q.Value.GetType().Name == "String")
                                                                 {
                                                                     sql.AppendFormat(" AND ( [{0}] LIKE @{0} )", Name);
                                                                     dbParams.Add('@' + Name, '%' + (q.Value == null ? null : q.Value.ToString()) + '%');
@@ -161,12 +161,12 @@ namespace Smart.Data.Module.Contexts
                                                                 {
                                                                     sql.AppendFormat(" AND ( [{0}] IN ({1}) )", Name, String.Join(',', ((JArray)q.Value)
                                                                         .ToObject<List<string>>()
-                                                                        .Select(c => 
-                                                                            String.Format("'{0}'", c.Trim().Replace("'","''")))
+                                                                        .Select(c =>
+                                                                            String.Format("'{0}'", c.Trim().Replace("'", "''")))
                                                                             ));
                                                                     break;
                                                                 }
-                                                              
+
 
                                                             case "end-with":
                                                                 sql.AppendFormat(" AND ( [{0}] LIKE @{0} )", Name);
@@ -267,6 +267,39 @@ namespace Smart.Data.Module.Contexts
                                                         }
                                                         break;
 
+                                                    case "dateTime":
+                                                    case "date":
+                                                    case "dateTime2":
+                                                       // if (q.Operator== "between")
+                                                        if(String.Equals("between", q.Operator, StringComparison.OrdinalIgnoreCase))
+                                                        {
+                                                            DateTime v1;
+                                                            DateTime v2;
+
+                                                            DateTime.TryParse((((Newtonsoft.Json.Linq.JContainer)q.Value).First)?.ToString(), out v1);
+                                                            DateTime.TryParse((((Newtonsoft.Json.Linq.JContainer)q.Value).Last)?.ToString(), out v2);
+
+                                                            sql.AppendFormat(" AND ( [{0}] BETWEEN  @{0}1 AND @{0}2 )", Name);
+                                                            dbParams.Add('@' + Name + '1', v1);
+                                                            dbParams.Add('@' + Name + '2', v2);
+                                                            break;
+
+                                                           
+                                                        }
+                                                        else
+                                                        {
+                                                            DateTime v1;
+                                                            DateTime.TryParse((q.Value)?.ToString(), out v1);
+
+                                                            sql.AppendFormat(" AND ( [{0}] = @{0} )", Name);
+                                                            dbParams.Add('@' + Name, v1);
+                                                            break;
+
+                                                        }
+
+
+                                                        break;
+
                                                     case "json":
                                                         switch (q.Operator)
                                                         {
@@ -278,8 +311,6 @@ namespace Smart.Data.Module.Contexts
                                                                         .Select(c =>
                                                                             String.Format("'{0}'", c.Trim().Replace("'", "''")))
                                                                             ));
-
-
                                                                 break;
                                                         }
                                                         break;
