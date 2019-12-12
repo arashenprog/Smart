@@ -13,7 +13,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Contexts\CrudGeneralContext.cs" />
     <Compile Remove="Contexts\DataSourceInput.cs" />
     <Compile Remove="Contexts\DataSourceType.cs" />
     <Compile Remove="Contexts\DynamicFormContext.cs" />
