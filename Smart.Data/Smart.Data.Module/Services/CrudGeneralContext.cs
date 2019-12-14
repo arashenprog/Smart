@@ -11,7 +11,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Smart.Data.Module.Contexts
+namespace Smart.Data.Module.Services
 {
     public class CRUDGeneralContext : ICRUDGeneral
     {

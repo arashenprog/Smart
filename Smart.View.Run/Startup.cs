@@ -3,13 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using ACoreX.AssemblyLoader;
-using ACoreX.Authentication.Core;
-using ACoreX.Authentication.JWT;
-using ACoreX.Data.Abstractions;
-using ACoreX.Data.Dapper;
-using ACoreX.Injector.Abstractions;
-using ACoreX.Injector.Core;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -17,7 +10,11 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using ACoreX.AssemblyLoader;
 
+using ACoreX.Injector.Core;
+using ACoreX.Injector.Abstractions;
+using ACoreX.Injector.NetCore;
 namespace Smart.View.Run
 {
     public class Startup
@@ -36,19 +33,19 @@ namespace Smart.View.Run
         {
             string libPath = Configuration["Moduels:Path"];
             IContainerBuilder builder = services.AddBuilder(new NetCoreContainerBuilder(services));
-            builder.AddTransient<IData, DapperData>(new DapperData(Configuration["ConnectionString:SQLConnection"]));
+            builder.AddSingleton<ACoreX.Configurations.Abstractions.IConfiguration, ACoreX.Configurations.NetCore.NetCoreConfiguration>();
             services
-           .AddAuthenticationInstance<JWTAuthService>()
+           //.AddAuthenticationInstance<JWTAuthService>()
            .AddCors(options =>
-            {
-                options.AddPolicy(MyAllowSpecificOrigins,
-                builder =>
-                {
-                    builder.AllowAnyOrigin()
-                           .AllowAnyMethod()
-                           .AllowAnyHeader();
-                });
-            })
+           {
+               options.AddPolicy(MyAllowSpecificOrigins,
+               builder =>
+               {
+                   builder.AllowAnyOrigin()
+                          .AllowAnyMethod()
+                          .AllowAnyHeader();
+               });
+           })
            .AddMvc()
            .AddNewtonsoftJson()
            .SetCompatibilityVersion(CompatibilityVersion.Version_3_0)

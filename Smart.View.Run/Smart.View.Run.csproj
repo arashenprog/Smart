@@ -9,16 +9,24 @@
     <PackageReference Include="ACoreX.Authentication.Abstractions" Version="1.1.1" />
     <PackageReference Include="ACoreX.Authentication.Core" Version="1.1.1" />
     <PackageReference Include="ACoreX.Authentication.JWT" Version="1.1.1" />
-    <PackageReference Include="ACoreX.Data.Abstractions" Version="1.0.11" />
+    <PackageReference Include="ACoreX.Configurations.Abstractions" Version="1.1.2" />
+    <PackageReference Include="ACoreX.Configurations.NetCore" Version="1.1.2" />
+    <PackageReference Include="ACoreX.Data.Abstractions" Version="1.1.1" />
     <PackageReference Include="ACoreX.Data.Dapper" Version="1.0.11" />
+    <PackageReference Include="ACoreX.Extensions.Base.Abstractions" Version="1.0.1" />
     <PackageReference Include="ACoreX.Extensions.Types" Version="1.0.1" />
-    <PackageReference Include="ACoreX.Injector.Abstractions" Version="1.1.1" />
-    <PackageReference Include="ACoreX.Injector.Core" Version="1.1.1" />
+    <PackageReference Include="ACoreX.Injector.Core" Version="1.1.2" />
+    <PackageReference Include="ACoreX.Injector.NetCore" Version="1.1.1" />
     <PackageReference Include="ACoreX.WebAPI" Version="1.1.1" />
-    <PackageReference Include="Dapper" Version="2.0.30" />
+    <PackageReference Include="ACoreX.WebAPI.Abstractions" Version="1.1.1" />
+    <PackageReference Include="Dapper" Version="2.0.4" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.0.0" />
     <PackageReference Include="Microsoft.CodeAnalysis" Version="2.8.0" />
+    <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="3.0.1" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="3.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="3.0.1" />
+    <PackageReference Include="System.Data.SqlClient" Version="4.8.0" />
   </ItemGroup>
 
 </Project>

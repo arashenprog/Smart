@@ -13,18 +13,18 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Contexts\DataSourceInput.cs" />
-    <Compile Remove="Contexts\DataSourceType.cs" />
-    <Compile Remove="Contexts\DynamicFormContext.cs" />
+    <Compile Remove="Services\DataSourceInput.cs" />
+    <Compile Remove="Services\DataSourceType.cs" />
+    <Compile Remove="Services\DynamicFormContext.cs" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="ACoreX.Configurations.Abstractions" Version="1.0.1" />
+    <PackageReference Include="ACoreX.Configurations.Abstractions" Version="1.1.2" />
     <PackageReference Include="ACoreX.Injector.Abstractions" Version="1.1.1" />
     <PackageReference Include="ACoreX.WebAPI.Abstractions" Version="1.1.1" />
-    <PackageReference Include="Dapper" Version="2.0.30" />
+    <PackageReference Include="Dapper" Version="2.0.4" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
-    <PackageReference Include="System.Data.SqlClient" Version="4.6.1" />
+    <PackageReference Include="System.Data.SqlClient" Version="4.8.0" />
   </ItemGroup>
 
   <ItemGroup>
