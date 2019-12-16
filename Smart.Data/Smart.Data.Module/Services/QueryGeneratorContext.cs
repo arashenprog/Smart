@@ -296,10 +296,27 @@ namespace Smart.Data.Module.Services
                             sql.Append(") T");
                             // Where Clause
                             string orderBY = null;
-                            if (!string.IsNullOrWhiteSpace(data.DSRC_ORDER))
+
+                            if (input.Sort.Count > 0)
                             {
-                                orderBY = data.DSRC_ORDER;
+                                foreach (var item in input.Sort)
+                                {
+                                    orderBY = orderBY +" "+ item.Field + " " + item.Sort;
+                                }
                             }
+                            else
+                            {
+                                if (!string.IsNullOrWhiteSpace(data.DSRC_ORDER))
+                                {
+                                    orderBY = data.DSRC_ORDER;
+                                }
+                            }
+
+                            //if (!string.IsNullOrWhiteSpace(data.DSRC_ORDER))
+                            //{
+                            //    orderBY = data.DSRC_ORDER;
+                            //}
+
                             // PAGING
                             if (input.Take > 0)
                             {
