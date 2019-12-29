@@ -10,8 +10,11 @@ namespace Smart.Data.Abstractions.Models
         public List<QuerySortItems> Sort { get; set; } = new List<QuerySortItems>();
         public string SearchExp { get; set; }
         public List<QueryFilterItems> Filters { get; set; } = new List<QueryFilterItems>();
-
         public List<string> Columns { get; set; } = new List<string>();
+
+        public List<string> Groups { get; set; } = new List<string>();
+
+        public List<string> GroupsKeys { get; set;} = new List<string>();
     }
 
 
