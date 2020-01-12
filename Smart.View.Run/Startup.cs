@@ -15,6 +15,9 @@ using ACoreX.AssemblyLoader;
 using ACoreX.Injector.Core;
 using ACoreX.Injector.Abstractions;
 using ACoreX.Injector.NetCore;
+using ACoreX.WebAPI;
+using Newtonsoft.Json;
+
 namespace Smart.View.Run
 {
     public class Startup
@@ -47,7 +50,9 @@ namespace Smart.View.Run
                });
            })
            .AddMvc()
-           .AddNewtonsoftJson()
+           .AddNewtonsoftJson(
+          options => { options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore; }
+      )
            .SetCompatibilityVersion(CompatibilityVersion.Version_3_0)
            .LoadModules(builder, libPath)
            .AddControllers();
@@ -62,6 +67,8 @@ namespace Smart.View.Run
             }
             app.UseCors(MyAllowSpecificOrigins);
             app.UseRouting();
+
+            //app.UseAPIResponseWrapperMiddleware();
 
             app.UseAuthorization();
 
