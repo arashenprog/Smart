@@ -50,9 +50,9 @@ namespace Smart.View.Run
                });
            })
            .AddMvc()
-           .AddNewtonsoftJson(
-          options => { options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore; }
-      )
+      //     .AddNewtonsoftJson(
+      //    options => { options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore; }
+      //)
            .SetCompatibilityVersion(CompatibilityVersion.Version_3_0)
            .LoadModules(builder, libPath)
            .AddControllers();
@@ -68,7 +68,7 @@ namespace Smart.View.Run
             app.UseCors(MyAllowSpecificOrigins);
             app.UseRouting();
 
-            //app.UseAPIResponseWrapperMiddleware();
+            app.UseAPIResponseWrapperMiddleware();
 
             app.UseAuthorization();
 

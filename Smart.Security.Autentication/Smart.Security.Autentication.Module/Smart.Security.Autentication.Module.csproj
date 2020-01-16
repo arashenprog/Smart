@@ -10,8 +10,8 @@
   <ItemGroup>
     <PackageReference Include="ACoreX.Data.Abstractions" Version="1.1.1" />
     <PackageReference Include="ACoreX.Injector.Abstractions" Version="1.1.2" />
-    <PackageReference Include="ACoreX.WebAPI" Version="1.1.2" />
-    <PackageReference Include="ACoreX.WebAPI.Abstractions" Version="1.1.2" />
+    <PackageReference Include="ACoreX.WebAPI" Version="1.1.3" />
+    <PackageReference Include="ACoreX.WebAPI.Abstractions" Version="1.1.3" />
   </ItemGroup>
 
   <ItemGroup>
